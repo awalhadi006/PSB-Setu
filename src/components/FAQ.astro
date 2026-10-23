@@ -1,0 +1,39 @@
+---
+import { site } from '@/data/site';
+---
+
+<section id="faq" class="section bg-surface-container-lowest text-on-surface" aria-labelledby="faq-title">
+  <div class="section-header">
+    <span class="section-label">Informasi Umum</span>
+    <h2 id="faq-title" class="section-title-md3">Tanya Jawab (FAQ)</h2>
+    <p class="section-subtext">Pertanyaan yang paling sering diajukan oleh calon wali santri.</p>
+    <div class="section-divider" aria-hidden="true"></div>
+  </div>
+
+  <!-- Accordion List -->
+  <div class="flex flex-col gap-2.5">
+    {site.faq.map(({ pertanyaan, jawaban }, index) => (
+      <div class="faq-item">
+        <button
+          class="faq-trigger"
+          aria-expanded="false"
+          aria-controls={`faq-answer-${index}`}
+          id={`faq-trigger-${index}`}
+          onclick="toggleFaq(this)"
+          type="button"
+        >
+          <span class="faq-question">{pertanyaan}</span>
+          <span class="faq-icon material-symbols" style="transform: rotate(0deg);">expand_more</span>
+        </button>
+        <div
+          id={`faq-answer-${index}`}
+          class="faq-answer hidden"
+          role="region"
+          aria-labelledby={`faq-trigger-${index}`}
+        >
+          {jawaban}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

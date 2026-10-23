@@ -1,0 +1,71 @@
+---
+import { site } from '../data/site';
+import logo from '../assets/Logo.png';
+import '../styles/global.css';
+
+const props = Astro.props;
+const title = props.title;
+const description = props.description;
+const canonicalPath = props.canonicalPath || '/';
+const ogImage = props.ogImage || '/og-default.jpg';
+
+const baseUrl = `https://${site.kontak.website}`;
+const canonicalUrl = new URL(canonicalPath, baseUrl).toString();
+const fullOgImageUrl = new URL(ogImage, baseUrl).toString();
+const pageTitle = `${title} | ${site.nama}`;
+---
+
+<!doctype html>
+<html class="light" lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="shell-type" content="mobile_tab" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta name="theme-color" content="#0B3D2E" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B3D2E" media="(prefers-color-scheme: dark)" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={fullOgImageUrl} />
+    <meta property="og:site_name" content={site.nama} />
+    <meta property="og:locale" content="id_ID" />
+
+    <!-- Favicon from asset Logo.png -->
+    <link rel="icon" type="image/png" href={logo.src} sizes="any" />
+    <link rel="apple-touch-icon" href={logo.src} />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <!-- Main script as module (processed by Vite) -->
+    <script type="module">
+      import '../scripts/main.ts';
+    </script>
+  </head>
+  <body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen selection:bg-secondary-container selection:text-on-secondary-container">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  /* Ensure html/body take full height for layout stability */
+  html,
+  body {
+    margin: 0;
+    min-height: 100%;
+  }
+</style>

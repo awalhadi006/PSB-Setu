@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "active_work_id": "psb-landing-page-ad9d22b4",
+  "works": {
+    "psb-landing-page-ad9d22b4": {
+      "work_id": "psb-landing-page-ad9d22b4",
+      "active_plan": "C:\\Users\\PONDOK\\orca\\projects\\PSB\\.omo\\plans\\psb-landing-page.md",
+      "plan_name": "psb-landing-page",
+      "status": "completed",
+      "started_at": "2026-10-21T03:49:37.851Z",
+      "updated_at": "2026-10-21T12:18:30.558Z",
+      "session_ids": [
+        "opencode:ses_ea47b06abffeBQmapTaBPI4gjX"
+      ],
+      "session_origins": {
+        "opencode:ses_ea47b06abffeBQmapTaBPI4gjX": "direct"
+      },
+      "agent": "atlas",
+      "task_sessions": {},
+      "ended_at": "2026-10-21T12:18:30.557Z",
+      "elapsed_ms": 30532706
+    }
+  },
+  "active_plan": "C:\\Users\\PONDOK\\orca\\projects\\PSB\\.omo\\plans\\psb-landing-page.md",
+  "started_at": "2026-10-21T03:49:37.851Z",
+  "status": "completed",
+  "updated_at": "2026-10-21T12:18:30.558Z",
+  "session_ids": [
+    "opencode:ses_ea47b06abffeBQmapTaBPI4gjX"
+  ],
+  "session_origins": {
+    "opencode:ses_ea47b06abffeBQmapTaBPI4gjX": "direct"
+  },
+  "plan_name": "psb-landing-page",
+  "task_sessions": {},
+  "agent": "atlas",
+  "ended_at": "2026-10-21T12:18:30.557Z",
+  "elapsed_ms": 30532706
+}

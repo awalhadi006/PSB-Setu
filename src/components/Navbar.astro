@@ -1,0 +1,49 @@
+---
+import { site } from '@/data/site';
+import logo from '@/assets/Logo.png';
+
+const navLinks = [
+  { id: 'beranda', label: 'Beranda', icon: 'home' },
+  { id: 'profil', label: 'Profil Pesantren', icon: 'auto_stories' },
+  { id: 'kegiatan', label: 'Kegiatan Santri', icon: 'diversity_3' },
+  { id: 'pengajar', label: 'Dewan Asatidz', icon: 'psychology' },
+  { id: 'jadwal', label: 'Jadwal PSB', icon: 'event_note' },
+  { id: 'syarat', label: 'Syarat Pendaftaran', icon: 'checklist' },
+  { id: 'biaya', label: 'Biaya Pendidikan', icon: 'payments' },
+  { id: 'cara-mendaftar', label: 'Cara Mendaftar', icon: 'app_registration' },
+  { id: 'faq', label: 'FAQ', icon: 'quiz' },
+  { id: 'kontak', label: 'Kontak & Lokasi', icon: 'contact_support' },
+] as const;
+
+const fullName = site.nama;
+---
+
+<!-- Fixed Header -->
+<header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl pt-safe shadow-[0_2px_12px_rgba(0,38,27,0.04)] hidden transition-transform duration-300 ease-out">
+  <div class="h-16 px-gutter-mobile flex items-center justify-between">
+    <!-- Left: Logo -->
+    <div class="flex items-center gap-space-sm min-w-0">
+      <div class="flex items-center gap-space-xs min-w-0">
+        <div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-primary-fixed shrink-0">
+          <img src={logo.src} alt="" class="w-6 h-6" loading="eager" />
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="font-headline-sm text-headline-sm text-primary leading-none tracking-tight truncate">
+            {fullName}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: empty (WA button moved to FAB) -->
+    <div class="flex items-center gap-space-xs shrink-0">
+    </div>
+  </div>
+</header>
+
+<style is:global>
+  /* Header scroll shadow enhancement */
+  header.scrolled {
+    @apply shadow-[0_4px_20px_rgba(0,38,27,0.08)];
+  }
+</style>

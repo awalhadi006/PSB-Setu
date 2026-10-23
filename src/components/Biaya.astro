@@ -1,0 +1,125 @@
+---
+import { site } from '@/data/site';
+---
+
+<section id="biaya" class="section bg-surface-container-lowest text-on-surface" aria-labelledby="biaya-title">
+  <div class="section-header">
+    <span class="section-label">Investasi Pendidikan Transparan</span>
+    <h2 id="biaya-title" class="section-title-md3">Rincian Biaya Pendidikan</h2>
+    <p class="section-subtext">Pilihan jalur pendaftaran sesuai kondisi keluarga santri.</p>
+    <div class="section-divider" aria-hidden="true"></div>
+  </div>
+
+  <!-- Segmented Control Tabs -->
+  <div class="w-full bg-surface-container p-1 rounded-2xl flex items-center" role="tablist">
+    <button
+      id="tab-btn-umum"
+      class="biaya-tab-btn inactive"
+      onclick="switchBiayaTab('umum')"
+      role="tab"
+      type="button"
+      aria-selected="false"
+    >
+      Jalur Umum
+    </button>
+    <button
+      id="tab-btn-dhuafa"
+      class="biaya-tab-btn inactive"
+      onclick="switchBiayaTab('dhuafa')"
+      role="tab"
+      type="button"
+      aria-selected="false"
+    >
+      Jalur Dhuafa
+    </button>
+    <button
+      id="tab-btn-yatim"
+      class="biaya-tab-btn active"
+      onclick="switchBiayaTab('yatim')"
+      role="tab"
+      type="button"
+      aria-selected="true"
+    >
+      Jalur Yatim
+    </button>
+  </div>
+
+  <!-- Card Container for Jalur Umum -->
+  <div id="content-umum" class="biaya-content hidden">
+    <div class="biaya-header">
+      <span class="biaya-title">Rincian Jalur Umum</span>
+      <span class="biaya-badge biaya-badge-reguler">Reguler</span>
+    </div>
+    <div class="flex flex-col gap-2 font-body-sm text-body-sm">
+      <div class="biaya-row"><span class="biaya-row-label">Uang Bangunan</span><span class="biaya-row-value">Rp3.500.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">SPP Bulanan Awal</span><span class="biaya-row-value">Rp750.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Lemari Pribadi</span><span class="biaya-row-value">Rp585.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Baju Olahraga</span><span class="biaya-row-value">Rp165.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Kegiatan Awal Tahun</span><span class="biaya-row-value">Rp150.000</span></div>
+    </div>
+    <div class="biaya-total">
+      <span class="biaya-total-label">Total Masuk</span>
+      <span class="biaya-total-value">Rp5.150.000</span>
+    </div>
+  </div>
+
+  <!-- Card Container for Jalur Dhuafa -->
+  <div id="content-dhuafa" class="biaya-content hidden">
+    <div class="biaya-header">
+      <span class="biaya-title">Rincian Jalur Dhuafa</span>
+      <span class="biaya-badge biaya-badge-subsidi">Subsidi Khusus</span>
+    </div>
+    <div class="flex flex-col gap-2 font-body-sm text-body-sm">
+      <div class="biaya-row"><span class="biaya-row-label">Uang Bangunan</span><span class="biaya-row-value">Rp1.500.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">SPP Bulanan Awal</span><span class="biaya-row-value">Rp400.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Lemari Pribadi</span><span class="biaya-row-value">Rp585.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Baju Olahraga</span><span class="biaya-row-value">Rp165.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Kegiatan Awal Tahun</span><span class="biaya-row-value">Rp150.000</span></div>
+    </div>
+    <div class="biaya-total">
+      <span class="biaya-total-label">Total Masuk</span>
+      <span class="biaya-total-value">Rp2.800.000</span>
+    </div>
+  </div>
+
+  <!-- Card Container for Jalur Yatim -->
+  <div id="content-yatim" class="biaya-content">
+    <div class="biaya-header">
+      <span class="biaya-title">Rincian Jalur Yatim</span>
+      <span class="biaya-badge biaya-badge-beasiswa">Beasiswa 100%</span>
+    </div>
+    <div class="flex flex-col gap-2 font-body-sm text-body-sm">
+      <div class="biaya-row"><span class="biaya-row-label">Uang Bangunan</span><span class="biaya-row-value biaya-row-value-free">GRATIS (Rp0)</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">SPP Bulanan</span><span class="biaya-row-value biaya-row-value-free">GRATIS (Rp0)</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Lemari Pribadi</span><span class="biaya-row-value">Rp585.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Baju Olahraga</span><span class="biaya-row-value">Rp165.000</span></div>
+      <div class="biaya-row"><span class="biaya-row-label">Kegiatan Awal Tahun</span><span class="biaya-row-value">Rp150.000</span></div>
+    </div>
+    <div class="biaya-total">
+      <span class="biaya-total-label">Total Masuk</span>
+      <span class="biaya-total-value">Rp900.000</span>
+    </div>
+  </div>
+
+  <!-- Catatan & Ketentuan Biaya -->
+  <div class="biaya-ketentuan">
+    <div class="biaya-ketentuan-header">
+      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">info</span>
+      <span>Ketentuan Pembayaran</span>
+    </div>
+    <ul class="biaya-ketentuan-list">
+      <li class="biaya-ketentuan-item">
+        <span class="biaya-ketentuan-icon">check_circle</span>
+        <span>Biaya formulir pendaftaran Rp200.000 dibayarkan saat mengambil berkas.</span>
+      </li>
+      <li class="biaya-ketentuan-item">
+        <span class="biaya-ketentuan-icon">check_circle</span>
+        <span>Biaya bangunan dan SPP bulanan bagi santri yatim gratis.</span>
+      </li>
+      <li class="biaya-ketentuan-item">
+        <span class="biaya-ketentuan-icon">check_circle</span>
+        <span>Biaya masuk pesantren dilunasi ketika daftar ulang (16-17 Mei 2027).</span>
+      </li>
+    </ul>
+  </div>
+</section>

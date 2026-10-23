@@ -1,0 +1,77 @@
+---
+import { site } from '@/data/site';
+import gerbang from '@/assets/gerbang.jpg';
+---
+
+<section
+  id="beranda"
+  class="relative w-full bg-gradient-to-b from-primary-container via-[#145a41] to-primary text-on-primary px-gutter-mobile pt-space-md pb-space-xl overflow-hidden"
+  style={`background-image: linear-gradient(rgba(11, 61, 46, 0.9), rgba(20, 90, 65, 0.94), rgba(0, 38, 27, 0.97)), url("${gerbang.src}"); background-size: cover; background-position: center center;`}
+  aria-labelledby="hero-title"
+>
+  <!-- Subtle Arabesque Geometric Pattern Background Watermark -->
+  <div class="absolute inset-0 opacity-[0.06] pointer-events-none flex items-center justify-center">
+    <svg class="w-full h-full text-secondary-container" fill="currentColor" viewBox="0 0 400 400" aria-hidden="true">
+      <path d="M200 0 L230 110 L341 79 L280 170 L390 200 L280 230 L341 321 L230 290 L200 400 L170 290 L59 321 L120 230 L10 200 L120 170 L59 79 L170 110 Z" />
+      <circle cx="200" cy="200" fill="none" r="160" stroke="currentColor" stroke-width="1.5" />
+      <circle cx="200" cy="200" fill="none" r="120" stroke="currentColor" stroke-width="1.5" />
+    </svg>
+  </div>
+
+  <div class="relative z-10 flex flex-col items-center text-center">
+    <!-- Status Chip Pendaftaran -->
+    <div class="hero-status mb-space-md" role="status" aria-live="polite">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text">Status: Dibuka (18 Okt 2026 - 25 Apr 2027)</span>
+    </div>
+
+    <!-- Badge Penerimaan Santri Baru -->
+    <div class="hero-badge mb-space-md" aria-hidden="true">
+      <span class="psb-badge-icon">school</span>
+      <span class="psb-badge-text">Penerimaan Santri Baru 2027-2028</span>
+    </div>
+
+    <!-- Large Title (Noto Serif) -->
+    <h1 id="hero-title" class="hero-title mb-space-md">
+      Pondok Pesantren <br>
+      <span class="text-secondary-fixed italic font-normal">Al-Lathifah 2</span>
+    </h1>
+
+    <!-- Slogan / Tagline -->
+    <div class="slogan-box mb-space-lg">
+      <p class="slogan-text">"Lebih Baik Pesantren, Pesantren Lebih Baik"</p>
+    </div>
+
+    <!-- Arch Shaped Photo Placeholder (Kubah Silhouette) -->
+    <div class="arch-photo mb-space-xl">
+      <div class="arch-photo-inner">
+        <div
+          class="arch-photo-bg"
+          style={`background-image: url("${gerbang.src}");`}
+          aria-hidden="true"
+        ></div>
+        <div class="arch-photo-overlay">
+          <span class="arch-photo-caption">
+            <span class="material-symbols-outlined text-[15px]" aria-hidden="true">verified</span>
+            Kampus Al-Lathifah 2 Setu
+          </span>
+          <p class="arch-photo-location">Gerbang Masuk Kampus 2 Setu, Bekasi</p>
+        </div>
+        <!-- Arch Golden Trim -->
+        <div class="arch-trim" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- Action Button (Cara Mendaftar only) -->
+    <div class="hero-buttons">
+      <a
+        class="btn-secondary-stacked"
+        href="#cara-mendaftar"
+        aria-label="Cara mendaftar santri baru"
+      >
+        <span class="material-symbols-outlined text-[20px] text-secondary-fixed" aria-hidden="true">arrow_circle_down</span>
+        <span>Cara Mendaftar</span>
+      </a>
+    </div>
+  </div>
+</section>

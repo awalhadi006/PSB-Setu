@@ -1,0 +1,91 @@
+---
+import { site } from '@/data/site';
+import gerbang from '@/assets/gerbang.jpg';
+---
+
+<section id="cara-mendaftar" class="section bg-[#fbf7ee] text-on-surface" aria-labelledby="cara-mendaftar-title">
+  <div class="section-header">
+    <span class="section-label">Panduan Calon Santri</span>
+    <h2 id="cara-mendaftar-title" class="section-title-md3">Alur & Cara Mendaftar</h2>
+    <p class="section-subtext">Pendaftaran dilakukan secara langsung (offline) di sekretariat Al-Lathifah 2 Setu.</p>
+    <div class="section-divider" aria-hidden="true"></div>
+  </div>
+
+  <!-- 5 Langkah Alur Nomor -->
+  <div class="flex flex-col gap-3">
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 shadow-sm">
+      <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md font-bold shrink-0">1</div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-title-md text-title-md text-primary font-semibold">Datang ke Lokasi</span>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Hadir langsung ke Al-Lathifah 2 Setu pada jam pelayanan pendaftaran.</p>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 shadow-sm">
+      <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md font-bold shrink-0">2</div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-title-md text-title-md text-primary font-semibold">Beli & Isi Formulir</span>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Membayar biaya formulir Rp200.000 dan mengisi formulir resmi panitia.</p>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 shadow-sm">
+      <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md font-bold shrink-0">3</div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-title-md text-title-md text-primary font-semibold">Serahkan Berkas</span>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Menyerahkan kelengkapan berkas persyaratan fisik kepada panitia PSB.</p>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 shadow-sm">
+      <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md font-bold shrink-0">4</div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-title-md text-title-md text-primary font-semibold">Mengikuti Tes Masuk</span>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Santri mengikuti tes masuk dan wawancara pada tanggal 3 Mei 2027.</p>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 shadow-sm">
+      <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md font-bold shrink-0">5</div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-title-md text-title-md text-primary font-semibold">Daftar Ulang & Pelunasan</span>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Daftar ulang dan pelunasan biaya masuk pada 16-17 Mei 2027.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kartu Alamat & Map Static Container -->
+  <div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col gap-space-sm">
+    <div class="flex items-start gap-3">
+      <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0" aria-hidden="true">
+        <span class="material-symbols-outlined text-[24px]">location_on</span>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-label-sm text-label-sm uppercase font-bold text-secondary">Alamat Sekretariat PSB</span>
+        <p class="font-body-md text-body-md text-on-surface font-medium leading-relaxed">
+          Jl. Pasar Kojengkang, Kp. Sawah RT. 02 RW. 08, Ds. Cikarageman, Kec. Setu, Kab. Bekasi, Jawa Barat
+        </p>
+      </div>
+    </div>
+
+    <!-- Static Map Pipeline Trigger -->
+    <div class="w-full h-44 bg-surface-container bg-cover bg-center rounded-xl overflow-hidden relative shadow-inner" data-location="Jl. Pasar Kojengkang, Kp. Sawah RT. 02 RW. 08, Ds. Cikarageman, Kec. Setu, Kab. Bekasi, Jawa Barat" style={`background-image: url("${gerbang.src}");`}>
+      <div class="absolute inset-0 bg-primary/10 flex items-center justify-center">
+        <div class="bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 text-primary shadow-md">
+          <span class="material-symbols-outlined text-[18px] text-error" aria-hidden="true">location_on</span>
+          <span class="font-label-sm text-label-sm font-bold">Lokasi Al-Lathifah 2</span>
+        </div>
+      </div>
+    </div>
+
+    <a
+      class="btn-map-link"
+      href="https://maps.app.goo.gl/cTxkdwgGsj4Gv2Sg8"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <span class="material-symbols-outlined text-[20px] text-secondary-fixed" aria-hidden="true">navigation</span>
+      <span>Buka di Google Maps</span>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,100 @@
+---
+import { site } from '@/data/site';
+---
+
+<section id="jadwal" class="section bg-surface-container-lowest text-on-surface" aria-labelledby="jadwal-title">
+  <div class="section-header">
+    <span class="section-label">Agenda Penerimaan 2027/2028</span>
+    <h2 id="jadwal-title" class="section-title-md3">Jadwal & Agenda Pendaftaran</h2>
+    <div class="section-divider" aria-hidden="true"></div>
+  </div>
+
+  <!-- Quota alert & status chip -->
+  <div class="bg-secondary-container/20 p-4 rounded-2xl flex flex-col gap-1 text-center shadow-sm">
+    <div class="inline-flex items-center justify-center gap-1.5 text-on-secondary-container font-label-md text-label-md font-bold">
+      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">info</span>
+      <span>Pendaftaran Resmi Dibuka</span>
+    </div>
+    <p class="font-body-sm text-body-sm text-on-secondary-container font-medium">
+      Pendaftaran otomatis ditutup jika kuota sudah terpenuhi untuk menjaga rasio pembinaan santri.
+    </p>
+  </div>
+
+  <!-- Vertical Stepper Timeline -->
+  <div class="jadwal-timeline">
+    <!-- Continuous line -->
+    <div class="jadwal-timeline-line" aria-hidden="true"></div>
+
+    <!-- Step 1 -->
+    <div class="jadwal-step">
+      <div class="jadwal-step-number" aria-hidden="true" style="background-color: #0b3d2e; color: #bcedd7;">1</div>
+      <div class="jadwal-step-content">
+        <span class="jadwal-step-label">Tahap 1</span>
+        <h3 class="jadwal-step-title">Periode Pendaftaran</h3>
+        <p class="jadwal-step-date">18 Oktober 2026 - 25 April 2027</p>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="jadwal-step">
+      <div class="jadwal-step-number" aria-hidden="true" style="background-color: #0b3d2e; color: #bcedd7;">2</div>
+      <div class="jadwal-step-content">
+        <span class="jadwal-step-label">Tahap 2</span>
+        <h3 class="jadwal-step-title">Waktu Pelayanan Sekretariat</h3>
+        <p class="jadwal-step-date">Senin - Ahad</p>
+        <p class="jadwal-step-desc">Pukul 08.00 - 11.00 & 13.00 - 15.00 WIB</p>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="jadwal-step">
+      <div class="jadwal-step-number" aria-hidden="true" style="background-color: #0b3d2e; color: #bcedd7;">3</div>
+      <div class="jadwal-step-content">
+        <span class="jadwal-step-label">Tahap 3</span>
+        <h3 class="jadwal-step-title">Tes Masuk & Observasi</h3>
+        <p class="jadwal-step-date">3 Mei 2027</p>
+        <p class="jadwal-step-desc">Tes baca Qur'an, akademik dasar & wawancara wali</p>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="jadwal-step">
+      <div class="jadwal-step-number" aria-hidden="true" style="background-color: #0b3d2e; color: #bcedd7;">4</div>
+      <div class="jadwal-step-content">
+        <span class="jadwal-step-label">Tahap 4</span>
+        <h3 class="jadwal-step-title">Daftar Ulang & Pelunasan</h3>
+        <p class="jadwal-step-date">16 dan 17 Mei 2027</p>
+        <p class="jadwal-step-desc">Pengambilan perlengkapan lemari & seragam</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Location Footer Box - Clickable to Google Maps -->
+  <a
+    href="https://maps.app.goo.gl/cTxkdwgGsj4Gv2Sg8"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="jadwal-location"
+    aria-label="Buka lokasi Al-Lathifah 2 di Google Maps"
+  >
+    <span class="jadwal-location-icon" aria-hidden="true">pin_drop</span>
+    <div class="flex flex-col">
+      <span class="jadwal-location-label">Lokasi Pelaksanaan</span>
+      <span class="jadwal-location-value">Al-Lathifah 2 Setu, Bekasi</span>
+    </div>
+    <span class="material-symbols-outlined text-primary text-[18px]">open_in_new</span>
+  </a>
+</section>
+
+<style is:global>
+  .jadwal-location {
+    @apply bg-surface-container p-4 rounded-2xl flex items-center justify-between gap-3;
+  }
+  .jadwal-location:hover {
+    @apply bg-surface-container-high;
+  }
+  .jadwal-location:focus-visible {
+    @apply outline-none ring-2 ring-offset-2;
+    box-shadow: 0 0 0 2px #fed255;
+  }
+</style>

@@ -1,0 +1,144 @@
+---
+import kegiatan1 from '@/assets/kegiatan 1.jpg';
+import kegiatan2 from '@/assets/kegiatan 2.jpg';
+import kegiatan3 from '@/assets/kegiatan 3.jpg';
+import kegiatan4 from '@/assets/kegiatan 4.jpg';
+import kegiatan5 from '@/assets/kegiatan 5.jpg';
+
+const galeriImages = [
+  { src: kegiatan1.src, alt: 'Kajian Kitab Kuning & Halaqoh' },
+  { src: kegiatan2.src, alt: 'Sholat Berjamaah & Ibadah' },
+  { src: kegiatan3.src, alt: 'Pelatihan Hadroh & Kaligrafi' },
+  { src: kegiatan4.src, alt: 'Aktivitas Olahraga & Kemandirian' },
+  { src: kegiatan5.src, alt: 'Kegiatan Santri Lainnya' },
+];
+---
+
+<section id="galeri-dokumentasi" class="section bg-[#fbf7ee] text-on-surface" aria-labelledby="galeri-title">
+  <div class="section-header">
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container/30 text-on-secondary-container mb-1 shadow-sm">
+      <span class="material-symbols-outlined text-[16px] text-secondary" aria-hidden="true">photo_camera</span>
+      <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Dokumentasi Asli Kehidupan Kampus 24 Jam</span>
+    </div>
+    <h2 id="galeri-title" class="section-title-md3">Galeri Dokumentasi & Suasana Santri</h2>
+    <p class="section-subtext">Potret keseharian santri dalam menuntut ilmu, beribadah, dan mengasah potensi.</p>
+    <div class="section-divider" aria-hidden="true"></div>
+  </div>
+
+  <!-- Slideshow -->
+  <div class="relative">
+    <div id="galeri-slideshow" class="overflow-hidden rounded-2xl bg-surface-container-lowest" role="region" aria-label="Galeri foto kegiatan santri">
+      <div class="flex transition-transform duration-500 ease-out" id="galeri-track">
+        {galeriImages.map((img) => (
+          <div class="flex-shrink-0 w-full min-h-[280px] md:min-h-[320px] relative">
+            <img
+              src={img.src}
+              alt={img.alt}
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent" aria-hidden="true"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <button
+      id="galeri-prev"
+      class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm text-primary flex items-center justify-center shadow-md hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+      aria-label="Foto sebelumnya"
+      type="button"
+    >
+      <span class="material-symbols-outlined text-[24px]">chevron_left</span>
+    </button>
+    <button
+      id="galeri-next"
+      class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm text-primary flex items-center justify-center shadow-md hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+      aria-label="Foto selanjutnya"
+      type="button"
+    >
+      <span class="material-symbols-outlined text-[24px]">chevron_right</span>
+    </button>
+
+    <!-- Dots Indicator -->
+    <div id="galeri-dots" class="flex justify-center gap-2 mt-4" role="tablist" aria-label="Indikator slide galeri">
+      {galeriImages.map((_, i) => (
+        <button
+          class={`w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-primary w-6' : 'bg-on-surface-variant/40'}`}
+          data-index={i}
+          role="tab"
+          aria-label={`Slide ${i + 1}`}
+          aria-selected={i === 0}
+          type="button"
+        ></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  // Galeri Slideshow
+  const track = document.getElementById('galeri-track');
+  const prevBtn = document.getElementById('galeri-prev');
+  const nextBtn = document.getElementById('galeri-next');
+  const dotsContainer = document.getElementById('galeri-dots');
+  const slides = track?.querySelectorAll('.flex-shrink-0') || [];
+  const dots = dotsContainer?.querySelectorAll('button') || [];
+  let currentIndex = 0;
+  const totalSlides = slides.length;
+
+  function updateSlide(index) {
+    if (!track) return;
+    currentIndex = (index + totalSlides) % totalSlides;
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('bg-primary', i === currentIndex);
+      dot.classList.toggle('w-6', i === currentIndex);
+      dot.classList.toggle('bg-on-surface-variant/40', i !== currentIndex);
+      dot.setAttribute('aria-selected', i === currentIndex);
+    });
+  }
+
+  function nextSlide() {
+    updateSlide(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    updateSlide(currentIndex - 1);
+  }
+
+  prevBtn?.addEventListener('click', prevSlide);
+  nextBtn?.addEventListener('click', nextSlide);
+
+  dots.forEach((dot) => {
+    dot.addEventListener('click', () => {
+      const index = parseInt(dot.dataset.index, 10);
+      updateSlide(index);
+    });
+  });
+
+  // Auto-slide every 5 seconds
+  let autoSlideInterval = setInterval(nextSlide, 5000);
+
+  const slideshow = document.getElementById('galeri-slideshow');
+  slideshow?.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+  slideshow?.addEventListener('mouseleave', () => {
+    autoSlideInterval = setInterval(nextSlide, 5000);
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  slideshow?.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  slideshow?.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+  }, { passive: true });
+</script>

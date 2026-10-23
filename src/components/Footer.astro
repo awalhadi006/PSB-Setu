@@ -1,0 +1,34 @@
+---
+import { site } from '@/data/site';
+---
+
+<footer class="footer" role="contentinfo">
+  <div class="footer-brand">
+    <div class="footer-brand-header">
+      <div class="footer-brand-logo" aria-hidden="true">
+        <span class="material-symbols-outlined text-[20px]">mosque</span>
+      </div>
+      <span class="footer-brand-name">{site.nama}</span>
+    </div>
+  </div>
+
+  <div class="footer-info">
+    <p class="footer-info-item">
+      <span class="footer-info-icon" aria-hidden="true">location_on</span>
+      {site.alamat}
+    </p>
+    <p class="footer-info-item">
+      <span class="footer-info-icon" aria-hidden="true">call</span>
+      {site.kontak.whatsapp.nomor} / {site.kontak.whatsappAdmin.nomor}
+    </p>
+    <p class="footer-info-item">
+      <span class="footer-info-icon" aria-hidden="true">mail</span>
+      {site.kontak.email}
+    </p>
+  </div>
+
+  <div class="footer-copyright">
+    <p class="footer-copyright-main">&copy; {site.tahunAjaran.split('-')[1]} {site.nama}. All rights reserved.</p>
+    <p class="footer-copyright-sub">Penerimaan Santri Baru (PSB) Tahun Ajaran {site.tahunAjaran}</p>
+  </div>
+</footer>
