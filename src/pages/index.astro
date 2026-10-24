@@ -138,24 +138,22 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
 
     // 2. Dynamic imports after DOM ready — keeps initial bundle small
     async function initAnimations() {
-      // Import GSAP core + plugins
+      // Import GSAP core + plugins (no SplitText - premium plugin)
       var imports = await Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger'),
-        import('gsap/SplitText'),
         import('gsap/TextPlugin')
       ]);
       var gsap = imports[0].gsap;
       var ScrollTrigger = imports[1].ScrollTrigger;
-      var SplitText = imports[2].SplitText;
-      var TextPlugin = imports[3].TextPlugin;
+      var TextPlugin = imports[2].TextPlugin;
 
       // Register plugins
-      gsap.registerPlugin(ScrollTrigger, SplitText, TextPlugin);
+      gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
       // Import and initialize GSAP animations
       var gsapAnimations = await import('../scripts/gsap-animations.ts');
-      gsapAnimations.initAnimations(gsap, ScrollTrigger, SplitText, TextPlugin);
+      gsapAnimations.initAnimations(gsap, ScrollTrigger, TextPlugin);
     }
 
     // 3. Tab switcher for Rincian Biaya
