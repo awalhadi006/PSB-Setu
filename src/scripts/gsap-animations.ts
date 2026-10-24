@@ -2,19 +2,17 @@
 // All GSAP/ScrollTrigger animation logic for PSB Landing Page
 
 import type { GSAP, ScrollTrigger } from 'gsap';
-import type { SplitText } from 'gsap/SplitText';
 import type { TextPlugin } from 'gsap/TextPlugin';
 
 interface AnimationContext {
   gsap: GSAP;
   ScrollTrigger: typeof ScrollTrigger;
-  SplitText: typeof SplitText;
   TextPlugin: typeof TextPlugin;
 }
 
-export function initAnimations(gsap: GSAP, ScrollTrigger: typeof ScrollTrigger, SplitText: typeof SplitText, TextPlugin: typeof TextPlugin): void {
+export function initAnimations(gsap: GSAP, ScrollTrigger: typeof ScrollTrigger, TextPlugin: typeof TextPlugin): void {
   // Register plugins (already done in main.ts but safe to repeat)
-  gsap.registerPlugin(ScrollTrigger, SplitText, TextPlugin);
+  gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
   // Check prefers-reduced-motion
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,40 +23,26 @@ export function initAnimations(gsap: GSAP, ScrollTrigger: typeof ScrollTrigger, 
   }
 
   // ==========================================
-  // HERO ANIMATIONS
+  // HERO ANIMATIONS (CSS-based, no SplitText)
   // ==========================================
   const heroTitle = document.querySelector('#beranda h1#hero-title');
   const heroButton = document.querySelector('#beranda .btn-secondary-stacked');
 
   if (heroTitle) {
-    // SplitText: lines on mobile, words on desktop
+    // Simple fade-in animation without SplitText
     gsap.matchMedia().add(
       {
         mobile: '(max-width: 767px)',
         desktop: '(min-width: 768px)',
       },
       (context) => {
-        let split: ReturnType<typeof SplitText>;
-
-        if (context.conditions.mobile) {
-          split = new SplitText(heroTitle, { type: 'lines', linesClass: 'hero-title-line' });
-          gsap.from(split.lines, {
-            y: '100%',
-            opacity: 0,
-            duration: 1,
-            ease: 'power3.out',
-            stagger: 0.15,
-          });
-        } else {
-          split = new SplitText(heroTitle, { type: 'words,chars', wordsClass: 'hero-title-word', charsClass: 'hero-title-char' });
-          gsap.from(split.words, {
-            y: '100%',
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            stagger: 0.05,
-          });
-        }
+        // Fade in the whole title
+        gsap.from(heroTitle, {
+          y: 50,
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out',
+        });
 
         // Staggered button reveal
         if (heroButton) {
@@ -70,11 +54,6 @@ export function initAnimations(gsap: GSAP, ScrollTrigger: typeof ScrollTrigger, 
             delay: context.conditions.mobile ? 0.6 : 0.4,
           });
         }
-
-        // Store for cleanup
-        context.add(() => {
-          split?.revert();
-        });
       }
     );
   }
@@ -225,7 +204,7 @@ export function initAnimations(gsap: GSAP, ScrollTrigger: typeof ScrollTrigger, 
     ScrollTrigger.refresh();
   });
 
-  // Also refresh on font load (for SplitText accuracy)
+  // Also refresh on font load
   if (document.fonts) {
     document.fonts.ready.then(() => {
       ScrollTrigger.refresh();
