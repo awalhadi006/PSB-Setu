@@ -259,6 +259,31 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       });
 
       // ==========================================
+      // JADWAL STEPS TIMELINE ANIMATION (scroll-triggered)
+      // ==========================================
+      var jadwalSteps = document.querySelectorAll('#jadwal .jadwal-step');
+      jadwalSteps.forEach(function(step, index) {
+        // Initially hide steps (except first one)
+        if (index > 0) {
+          gsap.set(step, { opacity: 0, y: 30 });
+        }
+
+        gsap.to(step, {
+          scrollTrigger: {
+            trigger: step,
+            start: 'top 85%',
+            end: 'bottom 20%',
+            toggleActions: 'play reverse play reverse',
+            scrub: 0.5,
+          },
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+      });
+
+      // ==========================================
       // SECTION TITLE ORNAMENT (::before scaleX via .animate-in class)
       // ==========================================
       var sectionTitles = document.querySelectorAll('section.section h2.section-title');
