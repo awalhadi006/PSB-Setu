@@ -182,7 +182,7 @@ const siteData: Omit<SiteConfig, "biayaUmumTotal" | "biayaDhuafaTotal" | "biayaY
       "KMI Gontor",
     ],
   },
-  syarat: {
+syarat: {
     items: [
       "Beragama Islam",
       "Sehat jasmani dan rohani (bukti surat keterangan dokter)",
@@ -191,6 +191,7 @@ const siteData: Omit<SiteConfig, "biayaUmumTotal" | "biayaDhuafaTotal" | "biayaY
       "Lulus tes kesehatan (lab & fisik) di RS/Klinik mitra",
       "Surat rekomendasi RT/RW atau tokoh masyarakat setempat",
       "Fotokopi KTP & KK orang tua/wali (legalisir)",
+      "Pas foto 3 lembar",
       "Surat pernyataan bersedia mematuhi seluruh aturan pondok (KHUSUS)",
       "Surat pernyataan tidak pulang sebelum masa studi selesai kecuali izin (KHUSUS)",
       "Surat pernyataan orang tua/wali menanggung biaya pendidikan & kesehatan (KHUSUS)",
@@ -200,7 +201,7 @@ const siteData: Omit<SiteConfig, "biayaUmumTotal" | "biayaDhuafaTotal" | "biayaY
   jadwal: [
     {
       tahap: "Pendaftaran Dini (Early Bird)",
-      tanggalMulai: "2026-10-18",
+      tanggalMulai: "2026-10-25",
       tanggalSelesai: "2026-12-31",
       keterangan: "Potongan biaya pendaftaran Rp 500.000",
     },
@@ -298,11 +299,15 @@ const siteData: Omit<SiteConfig, "biayaUmumTotal" | "biayaDhuafaTotal" | "biayaY
       deskripsi: "Ambil formulir di kantor PSB Pondok Pesantren Al-Lathifah 2 atau unduh via website www.yayasanallathifah.com. Isi lengkap dengan tulisan jelas & tanda tangan orang tua/wali.",
     },
     {
-      langkah: "2. Serahkan Berkas Persyaratan",
+      langkah: "2. Mengambil Formulir",
       deskripsi: "Kumpulkan syarat no. 1–7 (KTP, KK, Akta, SKTM, Foto, Rekomendasi RT/RW, Surat Kesehatan) ke panitia PSB secara langsung atau via pos. Dapatkan Nomor Pendaftaran & Kartu Ujian.",
     },
     {
-      langkah: "3. Ikuti Tes Akademik & Wawancara",
+      langkah: "3. Menyerahkan Berkas",
+      deskripsi: "Menyerahkan kelengkapan berkas persyaratan fisik kepada panitia PSB.",
+    },
+    {
+      langkah: "4. Ikuti Tes Akademik & Wawancara",
       deskripsi: "Hadir pada jadwal Tes TKA/TOEFL/TOAFL & Wawancara (offline di pondok) sesuai Nomor Pendaftaran. Tes meliputi: Akademik, Tahfidz/Tilawah, Psikologi, & Wawancara Akhlak.",
     },
     {
@@ -316,28 +321,20 @@ const siteData: Omit<SiteConfig, "biayaUmumTotal" | "biayaDhuafaTotal" | "biayaY
   ],
   faq: [
     {
-      pertanyaan: "Apakah santri wajib hafalan 30 Juz?",
-      jawaban: "Target hafalan disesuaikan jenjang: SMA/MA target 30 Juz, SMP/MTs target 15 Juz, SD/MI target 5 Juz. Santri yang belum mencapai target tetap dibimbing intensif dengan sistem muraja'ah berjenjang hingga lulus.",
-    },
-    {
       pertanyaan: "Bagaimana sistem pendidikan formalnya?",
-      jawaban: "Santri mengikuti pendidikan formal SD/MI, SMP/MTs, SMA/MA yang terakreditasi A di lingkungan pondok (kelas khusus santri). Jam pelajaran formal pagi (07.00–13.00), tahfidz & keagamaan sore hingga malam (14.00–21.00).",
+      jawaban: "Santri mengikuti pendidikan formal SD/MI, SMP/MTs, SMA/MA yang terakreditasi A di lingkungan pondok (kelas khusus santri). Jam pelajaran formal full day pukul 08.00–14.50 WIB, tahfidz & keagamaan sore hingga malam.",
     },
     {
       pertanyaan: "Apakah boleh membawa HP / gadget pribadi?",
-      jawaban: "Tidak diperbolehkan membawa HP/gadget pribadi. Komunikasi dengan orang tua via telepon umum pondok (tersedia di setiap asrama) atau jadwal video call mingguan yang disediakan pondok (minggu pertama & ketiga setiap bulan).",
-    },
-    {
-      pertanyaan: "Bagaimana sistem kesehatan & asuransi santri?",
-      jawaban: "Pondok bekerjasama dengan Puskesmas Setu & RS Mitra Keluarga Bekasi. Setiap santri wajib check-up kesehatan rutin bulanan (gratis via BPJS Kesehatan/KIS). Biaya sakit ditanggung orang tua/wali, pondok menyediakan ruang isolasi, perawat, & ambulans darurat 24 jam.",
+      jawaban: "Tidak diperbolehkan membawa HP/gadget pribadi. Komunikasi dengan orang tua via telepon umum pondok (tersedia di setiap asrama) atau jadwal video call mingguan yang disediakan pondok.",
     },
     {
       pertanyaan: "Kapan kunjungan orang tua (Silaturahmi)?",
-      jawaban: "Silaturahmi rutin: Minggu pertama & ketiga setiap bulan, pukul 09.00–15.00 WIB. Diluar jadwal tersebut memerlukan izin tertulis Kepala Pondok. Khusus bulan Ramadhan & hari besar Islam: jadwal khusus diinformasikan via WA broadcast.",
+      jawaban: "Silaturahmi boleh setiap minggu, pukul 09.00–15.00 WIB. Diluar jadwal tersebut memerlukan izin tertulis Bagian Pengasuhan Santri. Khusus bulan Ramadhan & hari besar Islam: jadwal khusus diinformasikan via WA broadcast.",
     },
     {
       pertanyaan: "Apakah ada biaya tersembunyi selain yang tercantum?",
-      jawaban: "Tidak ada biaya tersembunyi. Semua biaya wajib tercantum detail di halaman Biaya (Umum/Dhuafa/Yatim). Biaya opsional (foto kenangan, baju lomba, souvenir, dana sosial, dll) diinformasikan terpisah sebelum kegiatan & TIDAK WAJIB dibayar.",
+      jawaban: "Tidak ada biaya tersembunyi. Semua biaya wajib tercantum detail di halaman Biaya (Umum/Dhuafa/Yatim). Biaya opsional (foto kenangan, baju lomba, souvenir, dana sosial, dll) diinformasikan terpisah sebelum kegiatan.",
     },
   ],
   sloganFotoGaleri: "Bersama Al-Lathifah, Mengukir Prestasi!",
