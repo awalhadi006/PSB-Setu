@@ -40,6 +40,19 @@ const pageTitle = `${title} | ${site.nama}`;
     <meta property="og:site_name" content={site.nama} />
     <meta property="og:locale" content="id_ID" />
 
+    <!-- Import Map for GSAP modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm",
+          "gsap/": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm/",
+          "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js",
+          "gsap/SplitText": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/SplitText.js",
+          "gsap/TextPlugin": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/TextPlugin.js"
+        }
+      }
+    </script>
+
     <!-- Favicon from asset Logo.png -->
     <link rel="icon" type="image/png" href={logo.src} sizes="any" />
     <link rel="apple-touch-icon" href={logo.src} />
