@@ -19,7 +19,11 @@ const fullName = site.nama;
 ---
 
 <!-- Fixed Header -->
-<header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl pt-safe shadow-[0_2px_12px_rgba(0,38,27,0.04)] hidden transition-transform duration-300 ease-out">
+<header
+  class="fixed top-0 inset-x-0 z-50 pt-safe hidden transition-transform duration-300 ease-out cursor-pointer"
+  onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+  style="background: linear-gradient(135deg, rgba(11, 61, 46, 0.95) 0%, rgba(20, 90, 65, 0.9) 50%, rgba(0, 38, 27, 0.95) 100%); backdrop-filter: blur(20px);"
+>
   <div class="h-16 px-gutter-mobile flex items-center justify-between">
     <!-- Left: Logo -->
     <div class="flex items-center gap-space-sm min-w-0">
@@ -40,10 +44,3 @@ const fullName = site.nama;
     </div>
   </div>
 </header>
-
-<style is:global>
-  /* Header scroll shadow enhancement */
-  header.scrolled {
-    @apply shadow-[0_4px_20px_rgba(0,38,27,0.08)];
-  }
-</style>
