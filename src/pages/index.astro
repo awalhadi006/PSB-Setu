@@ -132,34 +132,38 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
   <!-- Main JS entry point (inlined for Astro 5 static build) -->
   <script is:inline>
     // 1. Progressive enhancement: mark HTML as JS-ready immediately on DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
       document.documentElement.classList.add('js-ready');
     });
 
     // 2. Dynamic imports after DOM ready — keeps initial bundle small
-    async function initAnimations(): Promise<void> {
+    async function initAnimations() {
       // Import GSAP core + plugins
-      const [{ gsap }, { ScrollTrigger }, { SplitText }, { TextPlugin }] = await Promise.all([
+      var imports = await Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger'),
         import('gsap/SplitText'),
-        import('gsap/TextPlugin'),
+        import('gsap/TextPlugin')
       ]);
+      var gsap = imports[0].gsap;
+      var ScrollTrigger = imports[1].ScrollTrigger;
+      var SplitText = imports[2].SplitText;
+      var TextPlugin = imports[3].TextPlugin;
 
       // Register plugins
       gsap.registerPlugin(ScrollTrigger, SplitText, TextPlugin);
 
       // Import and initialize GSAP animations
-      const { initAnimations: initGsapAnimations } = await import('../scripts/gsap-animations.ts');
-      initGsapAnimations(gsap, ScrollTrigger, SplitText, TextPlugin);
+      var gsapAnimations = await import('../scripts/gsap-animations.ts');
+      gsapAnimations.initAnimations(gsap, ScrollTrigger, SplitText, TextPlugin);
     }
 
     // 3. Tab switcher for Rincian Biaya
-    function switchBiayaTab(tabName: string): void {
-      const tabs = ['umum', 'dhuafa', 'yatim'];
-      tabs.forEach((t) => {
-        const btn = document.getElementById('tab-btn-' + t);
-        const content = document.getElementById('content-' + t);
+    function switchBiayaTab(tabName) {
+      var tabs = ['umum', 'dhuafa', 'yatim'];
+      tabs.forEach(function(t) {
+        var btn = document.getElementById('tab-btn-' + t);
+        var content = document.getElementById('content-' + t);
         if (t === tabName) {
           btn?.classList.add('active');
           btn?.classList.remove('inactive');
@@ -177,28 +181,28 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     }
 
     // 4. Biaya total counter: smooth count-up
-    function animateBiayaTotal(tabName: string): void {
-      const panel = document.getElementById('content-' + tabName);
+    function animateBiayaTotal(tabName) {
+      var panel = document.getElementById('content-' + tabName);
       if (!panel) return;
-      const totalEl = panel.querySelector('.biaya-total-value');
+      var totalEl = panel.querySelector('.biaya-total-value');
       if (!totalEl) return;
 
       // Get target from data attribute (set once on first run)
-      let target = parseInt(totalEl.dataset.target || '0', 10);
+      var target = parseInt(totalEl.dataset.target || '0', 10);
       if (!target) {
-        const text = totalEl.textContent || '';
+        var text = totalEl.textContent || '';
         target = parseInt(text.replace(/\D/g, ''), 10);
         totalEl.dataset.target = String(target);
       }
       if (!target) return;
 
-      const duration = 1200;
-      const startTime = performance.now();
-      const frame = (now: number) => {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const displayValue = Math.round(target * eased);
+      var duration = 1200;
+      var startTime = performance.now();
+      var frame = function(now) {
+        var elapsed = now - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var displayValue = Math.round(target * eased);
         totalEl.textContent = 'Rp ' + displayValue.toLocaleString('id-ID');
         if (progress < 1) {
           requestAnimationFrame(frame);
@@ -208,10 +212,10 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     }
 
     // 5. Accordion toggle for FAQ
-    function toggleFaq(button: HTMLButtonElement): void {
-      const content = button.nextElementSibling as HTMLElement;
-      const icon = button.querySelector('.material-symbols') as HTMLElement;
-      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+    function toggleFaq(button) {
+      var content = button.nextElementSibling;
+      var icon = button.querySelector('.material-symbols');
+      var isExpanded = button.getAttribute('aria-expanded') === 'true';
 
       if (isExpanded) {
         content?.classList.add('hidden');
@@ -225,12 +229,12 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     }
 
     // 6. Header auto-hide: hide at top, show on scroll down
-    const header = document.querySelector('header');
+    var header = document.querySelector('header');
     if (header) {
-      let lastScrollY = 0;
-      const threshold = 4;
-      window.addEventListener('scroll', () => {
-        const currentScrollY = window.scrollY;
+      var lastScrollY = 0;
+      var threshold = 4;
+      window.addEventListener('scroll', function() {
+        var currentScrollY = window.scrollY;
 
         if (currentScrollY <= threshold) {
           header.classList.add('hidden');
@@ -250,21 +254,21 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     }
 
     // 7. Kick off initialization
-    async function main(): Promise<void> {
+    async function main() {
       await initAnimations();
 
       // 8. Refresh ScrollTrigger after all images/fonts have loaded
-      window.addEventListener('load', async () => {
-        const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+      window.addEventListener('load', async function() {
+        var ScrollTrigger = (await import('gsap/ScrollTrigger')).ScrollTrigger;
         ScrollTrigger.refresh();
       });
     }
 
     // Expose functions to global scope for inline onclick handlers
-    (window as any).switchBiayaTab = switchBiayaTab;
-    (window as any).toggleFaq = toggleFaq;
+    window.switchBiayaTab = switchBiayaTab;
+    window.toggleFaq = toggleFaq;
 
-    main().catch((err) => {
+    main().catch(function(err) {
       console.error('[main.ts] Initialization failed:', err);
     });
   </script>
