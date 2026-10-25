@@ -14,11 +14,11 @@ import { site } from '@/data/site';
   <div class="w-full bg-surface-container p-1 rounded-2xl flex items-center" role="tablist">
     <button
       id="tab-btn-umum"
-      class="biaya-tab-btn inactive"
+      class="biaya-tab-btn active"
       onclick="switchBiayaTab('umum')"
       role="tab"
       type="button"
-      aria-selected="false"
+      aria-selected="true"
     >
       Jalur Umum
     </button>
@@ -34,18 +34,18 @@ import { site } from '@/data/site';
     </button>
     <button
       id="tab-btn-yatim"
-      class="biaya-tab-btn active"
+      class="biaya-tab-btn inactive"
       onclick="switchBiayaTab('yatim')"
       role="tab"
       type="button"
-      aria-selected="true"
+      aria-selected="false"
     >
       Jalur Yatim
     </button>
   </div>
 
   <!-- Card Container for Jalur Umum -->
-  <div id="content-umum" class="biaya-content hidden">
+  <div id="content-umum" class="biaya-content">
     <div class="biaya-header">
       <span class="biaya-title">Rincian Jalur Umum</span>
       <span class="biaya-badge biaya-badge-reguler">Reguler</span>
@@ -83,7 +83,7 @@ import { site } from '@/data/site';
   </div>
 
   <!-- Card Container for Jalur Yatim -->
-  <div id="content-yatim" class="biaya-content">
+  <div id="content-yatim" class="biaya-content hidden">
     <div class="biaya-header">
       <span class="biaya-title">Rincian Jalur Yatim</span>
       <span class="biaya-badge biaya-badge-beasiswa">Beasiswa 100%</span>
