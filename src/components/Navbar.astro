@@ -2,21 +2,7 @@
 import { site } from '@/data/site';
 import logo from '@/assets/Logo.png';
 
-const navLinks = [
-  { id: 'beranda', label: 'Beranda', icon: 'home' },
-  { id: 'profil', label: 'Profil Pesantren', icon: 'auto_stories' },
-  { id: 'kegiatan', label: 'Kegiatan Santri', icon: 'diversity_3' },
-  { id: 'pengajar', label: 'Dewan Asatidz', icon: 'psychology' },
-  { id: 'jadwal', label: 'Jadwal PSB', icon: 'event_note' },
-  { id: 'syarat', label: 'Syarat Pendaftaran', icon: 'checklist' },
-  { id: 'biaya', label: 'Biaya Pendidikan', icon: 'payments' },
-  { id: 'cara-mendaftar', label: 'Cara Mendaftar', icon: 'app_registration' },
-  { id: 'faq', label: 'FAQ', icon: 'quiz' },
-  { id: 'kontak', label: 'Kontak & Lokasi', icon: 'contact_support' },
-] as const;
-
 const fullName = site.nama;
-const shortName = 'Al-Lathifah 2';
 ---
 
 <!-- Fixed Header -->
@@ -39,30 +25,14 @@ const shortName = 'Al-Lathifah 2';
         </div>
         <div class="flex flex-col min-w-0">
           <span class="font-headline-sm text-headline-sm text-white leading-none tracking-tight truncate">
-            <span class="hidden md:inline">{fullName}</span>
-            <span class="md:hidden">{shortName}</span>
+            {fullName}
           </span>
         </div>
       </div>
     </div>
 
-    <!-- Right: Desktop Navigation (hidden on mobile) -->
-    <nav class="hidden md:flex items-center gap-space-lg" aria-label="Navigasi utama">
-      {navLinks.map((link) => (
-        <a
-          class="font-label-md text-label-md text-white/90 hover:text-secondary-fixed transition-colors px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
-          href={`#${link.id}`}
-        >
-          <span class="flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-[18px]">{link.icon}</span>
-            <span>{link.label}</span>
-          </span>
-        </a>
-      ))}
-    </nav>
-
-    <!-- Right: Mobile hamburger (hidden on desktop) -->
-    <div class="md:hidden flex items-center gap-space-xs shrink-0">
+    <!-- Right: empty (WA button moved to FAB) -->
+    <div class="flex items-center gap-space-xs shrink-0">
     </div>
   </div>
 </header>
