@@ -2,19 +2,6 @@
 import { site } from '@/data/site';
 import logo from '@/assets/Logo.png';
 
-const navLinks = [
-  { id: 'beranda', label: 'Beranda', icon: 'home' },
-  { id: 'profil', label: 'Profil Pesantren', icon: 'auto_stories' },
-  { id: 'kegiatan', label: 'Kegiatan Santri', icon: 'diversity_3' },
-  { id: 'pengajar', label: 'Dewan Asatidz', icon: 'psychology' },
-  { id: 'jadwal', label: 'Jadwal PSB', icon: 'event_note' },
-  { id: 'syarat', label: 'Syarat Pendaftaran', icon: 'checklist' },
-  { id: 'biaya', label: 'Biaya Pendidikan', icon: 'payments' },
-  { id: 'cara-mendaftar', label: 'Cara Mendaftar', icon: 'app_registration' },
-  { id: 'faq', label: 'FAQ', icon: 'quiz' },
-  { id: 'kontak', label: 'Kontak & Lokasi', icon: 'contact_support' },
-] as const;
-
 const fullName = site.nama;
 ---
 
@@ -22,7 +9,12 @@ const fullName = site.nama;
 <header
   class="fixed top-0 inset-x-0 z-50 pt-safe hidden transition-transform duration-300 ease-out cursor-pointer"
   onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-  style="background: linear-gradient(135deg, rgba(11, 61, 46, 0.95) 0%, rgba(20, 90, 65, 0.9) 50%, rgba(0, 38, 27, 0.95) 100%); backdrop-filter: blur(20px);"
+  style="
+    background: rgba(11, 61, 46, 0.7);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(254, 210, 85, 0.12);
+    box-shadow: 0 4px 24px -4px rgba(0, 38, 27, 0.18);
+  "
 >
   <div class="h-16 px-gutter-mobile flex items-center justify-between">
     <!-- Left: Logo -->
