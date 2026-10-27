@@ -4,6 +4,20 @@ import kegiatan2 from '@/assets/kegiatan 2.jpg';
 import kegiatan3 from '@/assets/kegiatan 3.jpg';
 import kegiatan4 from '@/assets/kegiatan 4.jpg';
 import kegiatan5 from '@/assets/kegiatan 5.jpg';
+import pramuka from '@/assets/Kegiatan Pramuka.jpeg';
+import pbbTingkatII from '@/assets/PBB Lomba Tingkat II.jpeg';
+import lombaMasak from '@/assets/Jambore Lomba Masak.jpeg';
+import juaraUmumJambore from '@/assets/Juara Umum Jambore.jpeg';
+import juaraTingkatII from '@/assets/Juara Lomba Tingkat II.jpeg';
+import juaraUmumTingkatII from '@/assets/Juara Lomba Tingkat II(2).jpeg';
+import oborApiUnggun from '@/assets/Api Unggun.jpeg';
+import penyalaanApiUnggun from '@/assets/APi Unggun 1.jpeg';
+import lombaEstafet from '@/assets/17 Agustus 1.jpeg';
+import lombaKetangkasan from '@/assets/Lomba 17 Agustus.jpeg';
+import rihlahFlyingFox from '@/assets/Rihlah .jpeg';
+import rihlahPutri from '@/assets/Rihlah 2.jpeg';
+import rihlahPutra from '@/assets/Rihlah 3.jpeg';
+import pelepasanKelas9 from '@/assets/Pelepasan Kelas 9.jpeg';
 
 const galeriImages = [
   {
@@ -30,6 +44,76 @@ const galeriImages = [
     src: kegiatan5.src,
     alt: 'Santri putri menggunakan komputer di laboratorium komputer',
     caption: 'Praktik Komputer di Laboratorium',
+  },
+  {
+    src: pramuka.src,
+    alt: 'Empat santri putri berpakaian pramuka berfoto bersama',
+    caption: 'Kebersamaan Pramuka',
+  },
+  {
+    src: pbbTingkatII.src,
+    alt: 'Regu pramuka putri tampil dalam lomba PBB tingkat II',
+    caption: 'Lomba PBB Tingkat II',
+  },
+  {
+    src: lombaMasak.src,
+    alt: 'Santri putra menyiapkan bahan masakan dalam lomba masak jambore',
+    caption: 'Lomba Masak Jambore',
+  },
+  {
+    src: juaraUmumJambore.src,
+    alt: 'Foto bersama santri dan pembina dengan piala juara umum jambore',
+    caption: 'Juara Umum Jambore',
+  },
+  {
+    src: juaraTingkatII.src,
+    alt: 'Santri putra berfoto dengan piala dan vandel juara lomba tingkat II',
+    caption: 'Juara Lomba Tingkat II',
+  },
+  {
+    src: juaraUmumTingkatII.src,
+    alt: 'Foto bersama santri putra dan putri dengan piala juara umum lomba tingkat II',
+    caption: 'Juara Umum Lomba Tingkat II',
+  },
+  {
+    src: oborApiUnggun.src,
+    alt: 'Santri membawa obor saat upacara api unggun',
+    caption: 'Obor Api Unggun',
+  },
+  {
+    src: penyalaanApiUnggun.src,
+    alt: 'Santri putra menyalakan api unggun pramuka',
+    caption: 'Penyalaan Api Unggun',
+  },
+  {
+    src: lombaEstafet.src,
+    alt: 'Santri putri mengikuti lomba estafet air memperingati 17 Agustus',
+    caption: 'Lomba Estafet Air 17 Agustus',
+  },
+  {
+    src: lombaKetangkasan.src,
+    alt: 'Santri putra mengikuti lomba ketangkasan 17 Agustus',
+    caption: 'Lomba Ketangkasan 17 Agustus',
+  },
+  {
+    src: rihlahFlyingFox.src,
+    alt: 'Santri putri bersiap menaiki flying fox saat rihlah',
+    caption: 'Kegiatan Rihlah Santri Putri',
+  },
+  {
+    src: rihlahPutri.src,
+    alt: 'Santri putri berfoto bersama mengenakan helm saat rihlah',
+    caption: 'Kebersamaan Rihlah Santri Putri',
+  },
+  {
+    src: rihlahPutra.src,
+    alt: 'Foto bersama santri putra di The NICE Funtastic Park saat rihlah',
+    caption: 'Rihlah Santri Putra',
+  },
+  {
+    src: pelepasanKelas9.src,
+    alt: 'Santri putri duduk berbaris dalam acara pelepasan kelas 9',
+    caption: 'Pelepasan Kelas 9',
   },
 ];
 
@@ -116,10 +200,10 @@ const lastLoopIndex = loopImages.length - 1;
     </div>
 
     <!-- Dots Indicator -->
-    <div id="galeri-dots" class="flex justify-center gap-2 mt-3" role="tablist" aria-label="Indikator slide galeri">
+    <div id="galeri-dots" class="flex flex-wrap justify-center gap-1.5 mt-3" role="tablist" aria-label="Indikator slide galeri">
       {galeriImages.map((_, i) => (
         <button
-          class={`w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-primary w-6' : 'bg-on-surface-variant/40'}`}
+          class={`w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-primary w-5' : 'bg-on-surface-variant/40'}`}
           data-index={i}
           role="tab"
           aria-label={`Slide ${i + 1}: ${galeriImages[i].caption}`}
@@ -232,7 +316,7 @@ const lastLoopIndex = loopImages.length - 1;
       dots.forEach((dot, i) => {
         const active = i === realIndex;
         dot.classList.toggle('bg-primary', active);
-        dot.classList.toggle('w-6', active);
+        dot.classList.toggle('w-5', active);
         dot.classList.toggle('bg-on-surface-variant/40', !active);
         dot.setAttribute('aria-selected', String(active));
       });
@@ -264,7 +348,20 @@ const lastLoopIndex = loopImages.length - 1;
       const realIndex = realIndexOf(target);
       updateDots(realIndex);
       updateCaption(realIndex, animate);
+      preloadAhead(target);
       if (!animate || reduceMotion) settle();
+    }
+
+    // Muat 2 foto berikutnya lebih dulu supaya tidak kosong saat transisi
+    function preloadAhead(pos) {
+      for (let step = 1; step <= 2; step++) {
+        const slide = slides[(pos + step) % slides.length];
+        const img = slide ? slide.querySelector('img') : null;
+        const src = img ? img.getAttribute('src') : null;
+        if (!src) continue;
+        const pre = new Image();
+        pre.src = src;
+      }
     }
 
     // --- Autoplay: satu timer, tidak pernah menumpuk ---
