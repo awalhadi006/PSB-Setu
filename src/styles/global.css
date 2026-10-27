@@ -449,12 +449,15 @@
     @apply flex flex-col gap-4 relative pl-3;
   }
 
+  /* Garis penghubung statis — posisi & panjangnya dihitung dari nomor pertama ke nomor terakhir */
   .jadwal-timeline-line {
-    @apply absolute left-6 top-3 bottom-3 w-0.5 bg-surface-container-highest;
+    @apply absolute left-[25px] w-0.5 bg-surface-container-highest;
+    top: 0;
+    height: 0;
   }
 
   .jadwal-step {
-    @apply relative flex items-start gap-4;
+    @apply relative flex items-center gap-4;
   }
 
   .jadwal-step-number {

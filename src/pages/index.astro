@@ -244,7 +244,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       // ==========================================
       // TIMELINE DRAWING (stroke-dashoffset)
       // ==========================================
-      var timelinePaths = document.querySelectorAll('#jadwal .jadwal-timeline-line, #cara-mendaftar .timeline-path');
+      var timelinePaths = document.querySelectorAll('#cara-mendaftar .timeline-path');
       timelinePaths.forEach(function(path) {
         gsap.to(path, {
           scrollTrigger: {
@@ -471,11 +471,44 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       });
     }
 
-    // 7. Kick off initialization
+    // 7. Jadwal timeline line: tepat dari nomor 1 ke nomor 4
+    // Garis statis (tidak ikut animasi step) supaya tetap menyatu saat step fade/geser.
+    function layoutJadwalLine() {
+      var timeline = document.querySelector('#jadwal .jadwal-timeline');
+      var line = timeline ? timeline.querySelector('.jadwal-timeline-line') : null;
+      var steps = timeline ? timeline.querySelectorAll('.jadwal-step') : [];
+      if (!timeline || !line || steps.length === 0) return;
+
+      var numberCenterY = function(step) {
+        var number = step.querySelector('.jadwal-step-number');
+        if (!number) return 0;
+        var y = 0;
+        var node = number;
+        while (node && node !== timeline) {
+          y += node.offsetTop;
+          node = node.offsetParent;
+        }
+        return y + number.offsetHeight / 2;
+      };
+
+      var start = numberCenterY(steps[0]);
+      var end = numberCenterY(steps[steps.length - 1]);
+      line.style.top = start + 'px';
+      line.style.height = Math.max(0, end - start) + 'px';
+    }
+
+    layoutJadwalLine();
+    window.addEventListener('load', layoutJadwalLine);
+    window.addEventListener('resize', layoutJadwalLine);
+    if (document.fonts) {
+      document.fonts.ready.then(layoutJadwalLine);
+    }
+
+    // 8. Kick off initialization
     async function main() {
       await initAnimations();
 
-      // 8. Refresh ScrollTrigger after all images/fonts have loaded
+      // 9. Refresh ScrollTrigger after all images/fonts have loaded
       window.addEventListener('load', async function() {
         var ScrollTrigger = (await import('gsap/ScrollTrigger')).ScrollTrigger;
         ScrollTrigger.refresh();

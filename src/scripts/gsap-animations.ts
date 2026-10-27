@@ -105,7 +105,7 @@ export function initAnimations(gsap: GSAP, ScrollTrigger: typeof ScrollTrigger, 
   // ==========================================
   // TIMELINE DRAWING (stroke-dashoffset)
   // ==========================================
-  const timelinePaths = document.querySelectorAll('#jadwal .jadwal-timeline-line, #cara-mendaftar .timeline-path');
+  const timelinePaths = document.querySelectorAll('#cara-mendaftar .timeline-path');
   timelinePaths.forEach((path) => {
     gsap.to(path, {
       scrollTrigger: {
