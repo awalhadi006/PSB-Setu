@@ -6,12 +6,37 @@ import kegiatan4 from '@/assets/kegiatan 4.jpg';
 import kegiatan5 from '@/assets/kegiatan 5.jpg';
 
 const galeriImages = [
-  { src: kegiatan1.src, alt: 'Kajian Kitab Kuning & Halaqoh' },
-  { src: kegiatan2.src, alt: 'Sholat Berjamaah & Ibadah' },
-  { src: kegiatan3.src, alt: 'Pelatihan Hadroh & Kaligrafi' },
-  { src: kegiatan4.src, alt: 'Aktivitas Olahraga & Kemandirian' },
-  { src: kegiatan5.src, alt: 'Kegiatan Santri Lainnya' },
+  {
+    src: kegiatan1.src,
+    alt: 'Santri putra menulis catatan saat pembelajaran di kelas',
+    caption: 'Santri putra fokus belajar di kelas',
+  },
+  {
+    src: kegiatan2.src,
+    alt: 'Foto bersama dewan ustadz dan ustadzah Pondok Pesantren Al-Lathifah 2',
+    caption: 'Kebersamaan dewan ustadz & ustadzah',
+  },
+  {
+    src: kegiatan3.src,
+    alt: 'Santri putri berbaris dalam upacara Hari Santri 2024',
+    caption: 'Peringatan Hari Santri 2024',
+  },
+  {
+    src: kegiatan4.src,
+    alt: 'Halaqoh kitab kuning santri putra bersama ustadz di serambi masjid',
+    caption: 'Halaqoh kitab kuning di serambi masjid',
+  },
+  {
+    src: kegiatan5.src,
+    alt: 'Santri putri menggunakan komputer di laboratorium komputer',
+    caption: 'Praktik komputer di laboratorium',
+  },
 ];
+
+// Clone slide terakhir di depan dan slide pertama di belakang
+// supaya perpindahan antar slide selalu satu arah (tidak "balik" saat loop).
+const loopImages = [galeriImages[galeriImages.length - 1], ...galeriImages, galeriImages[0]];
+const lastLoopIndex = loopImages.length - 1;
 ---
 
 <section id="galeri-dokumentasi" class="section bg-[#fbf7ee] text-on-surface" aria-labelledby="galeri-title">
@@ -27,19 +52,40 @@ const galeriImages = [
 
   <!-- Slideshow -->
   <div class="relative">
-    <div id="galeri-slideshow" class="overflow-hidden rounded-2xl bg-surface-container-lowest" role="region" aria-label="Galeri foto kegiatan santri">
-      <div class="flex transition-transform duration-500 ease-out" id="galeri-track">
-        {galeriImages.map((img) => (
-          <div class="flex-shrink-0 w-full min-h-[280px] md:min-h-[320px] relative">
-            <img
-              src={img.src}
-              alt={img.alt}
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent" aria-hidden="true"></div>
-          </div>
-        ))}
+    <div
+      id="galeri-slideshow"
+      class="overflow-hidden rounded-2xl bg-surface-container-lowest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Galeri foto kegiatan santri"
+      tabindex="0"
+    >
+      <div
+        class="flex"
+        id="galeri-track"
+        style="transform: translateX(-100%)"
+      >
+        {loopImages.map((img, i) => {
+          const isClone = i === 0 || i === lastLoopIndex;
+          const realIndex = i === 0 ? galeriImages.length - 1 : i === lastLoopIndex ? 0 : i - 1;
+          return (
+            <div
+              class="flex-shrink-0 w-full h-[280px] md:h-[380px] lg:h-[420px] relative overflow-hidden"
+              data-real-index={realIndex}
+              data-caption={img.caption}
+              aria-hidden={isClone ? 'true' : undefined}
+            >
+              <img
+                src={img.src}
+                alt={isClone ? '' : img.alt}
+                class="absolute inset-0 w-full h-full object-cover"
+                loading={realIndex < 2 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" aria-hidden="true"></div>
+            </div>
+          );
+        })}
       </div>
     </div>
 
@@ -61,14 +107,22 @@ const galeriImages = [
       <span class="material-symbols-outlined text-[24px]">chevron_right</span>
     </button>
 
+    <!-- Caption -->
+    <div class="flex justify-center mt-3 px-2">
+      <p id="galeri-caption" class="galeri-caption inline-flex items-center gap-1.5 max-w-full px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant font-body-sm text-body-sm shadow-sm">
+        <span class="material-symbols-outlined text-[15px] text-secondary shrink-0" aria-hidden="true">photo_camera</span>
+        <span id="galeri-caption-text" class="truncate min-w-0">{galeriImages[0].caption}</span>
+      </p>
+    </div>
+
     <!-- Dots Indicator -->
-    <div id="galeri-dots" class="flex justify-center gap-2 mt-4" role="tablist" aria-label="Indikator slide galeri">
+    <div id="galeri-dots" class="flex justify-center gap-2 mt-3" role="tablist" aria-label="Indikator slide galeri">
       {galeriImages.map((_, i) => (
         <button
           class={`w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-primary w-6' : 'bg-on-surface-variant/40'}`}
           data-index={i}
           role="tab"
-          aria-label={`Slide ${i + 1}`}
+          aria-label={`Slide ${i + 1}: ${galeriImages[i].caption}`}
           aria-selected={i === 0}
           type="button"
         ></button>
@@ -77,68 +131,257 @@ const galeriImages = [
   </div>
 </section>
 
-<script is:inline>
-  // Galeri Slideshow
-  const track = document.getElementById('galeri-track');
-  const prevBtn = document.getElementById('galeri-prev');
-  const nextBtn = document.getElementById('galeri-next');
-  const dotsContainer = document.getElementById('galeri-dots');
-  const slides = track?.querySelectorAll('.flex-shrink-0') || [];
-  const dots = dotsContainer?.querySelectorAll('button') || [];
-  let currentIndex = 0;
-  const totalSlides = slides.length;
-
-  function updateSlide(index) {
-    if (!track) return;
-    currentIndex = (index + totalSlides) % totalSlides;
-    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('bg-primary', i === currentIndex);
-      dot.classList.toggle('w-6', i === currentIndex);
-      dot.classList.toggle('bg-on-surface-variant/40', i !== currentIndex);
-      dot.setAttribute('aria-selected', i === currentIndex);
-    });
+<style>
+  #galeri-track {
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
 
-  function nextSlide() {
-    updateSlide(currentIndex + 1);
+  .galeri-caption {
+    transition: opacity 200ms ease, transform 200ms ease;
   }
 
-  function prevSlide() {
-    updateSlide(currentIndex - 1);
+  .galeri-caption.is-swapping {
+    opacity: 0;
+    transform: translateY(4px);
   }
 
-  prevBtn?.addEventListener('click', prevSlide);
-  nextBtn?.addEventListener('click', nextSlide);
-
-  dots.forEach((dot) => {
-    dot.addEventListener('click', () => {
-      const index = parseInt(dot.dataset.index, 10);
-      updateSlide(index);
-    });
-  });
-
-  // Auto-slide every 5 seconds
-  let autoSlideInterval = setInterval(nextSlide, 5000);
-
-  const slideshow = document.getElementById('galeri-slideshow');
-  slideshow?.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-  slideshow?.addEventListener('mouseleave', () => {
-    autoSlideInterval = setInterval(nextSlide, 5000);
-  });
-
-  // Touch/swipe support
-  let touchStartX = 0;
-  slideshow?.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-  }, { passive: true });
-
-  slideshow?.addEventListener('touchend', (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextSlide();
-      else prevSlide();
+  @media (prefers-reduced-motion: reduce) {
+    #galeri-track {
+      transition: none;
     }
-  }, { passive: true });
+
+    .galeri-caption {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Galeri Slideshow — loop satu arah (clone di kedua ujung)
+  (function () {
+    const slideshow = document.getElementById('galeri-slideshow');
+    const track = document.getElementById('galeri-track');
+    const prevBtn = document.getElementById('galeri-prev');
+    const nextBtn = document.getElementById('galeri-next');
+    const dotsContainer = document.getElementById('galeri-dots');
+    const captionEl = document.getElementById('galeri-caption');
+    const captionTextEl = document.getElementById('galeri-caption-text');
+
+    if (!slideshow || !track) return;
+
+    const slides = Array.from(track.children);
+    const realCount = slides.length - 2; // buang 2 clone
+    const dots = dotsContainer ? Array.from(dotsContainer.children) : [];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const AUTOPLAY_MS = 5000;
+
+    // Caption per slide asli
+    const captions = [];
+    slides.forEach((slide) => {
+      captions[Number(slide.dataset.realIndex)] = slide.dataset.caption || '';
+    });
+
+    let position = 1; // 0 dan realCount+1 adalah clone
+    let isAnimating = false;
+    let autoTimer = null;
+    let settleTimer = null;
+    let captionTimer = null;
+    const pauseReasons = new Set();
+
+    function realIndexOf(pos) {
+      if (pos <= 0) return realCount - 1;
+      if (pos >= realCount + 1) return 0;
+      return pos - 1;
+    }
+
+    function applyPosition(pos, animate) {
+      position = pos;
+      clearTimeout(settleTimer);
+
+      if (!animate || reduceMotion) {
+        isAnimating = false;
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(-' + pos * 100 + '%)';
+        void track.offsetWidth; // flush style sebelum transisi berikutnya
+        track.style.transition = '';
+        return;
+      }
+
+      isAnimating = true;
+      track.style.transform = 'translateX(-' + pos * 100 + '%)';
+      // fallback kalau transitionend tidak terpanggil
+      settleTimer = setTimeout(() => {
+        isAnimating = false;
+        settle();
+      }, 700);
+    }
+
+    // Setelah sampai di clone, lompat diam-diam ke slide asli pasangannya
+    function settle() {
+      if (isAnimating) return;
+      clearTimeout(settleTimer);
+      if (position === 0) {
+        applyPosition(realCount, false);
+      } else if (position === realCount + 1) {
+        applyPosition(1, false);
+      }
+    }
+
+    function updateDots(realIndex) {
+      dots.forEach((dot, i) => {
+        const active = i === realIndex;
+        dot.classList.toggle('bg-primary', active);
+        dot.classList.toggle('w-6', active);
+        dot.classList.toggle('bg-on-surface-variant/40', !active);
+        dot.setAttribute('aria-selected', String(active));
+      });
+    }
+
+    function updateCaption(realIndex, animate) {
+      if (!captionTextEl) return;
+      const text = captions[realIndex] || '';
+      if (captionTextEl.textContent.trim() === text) return;
+
+      clearTimeout(captionTimer);
+
+      if (!animate || reduceMotion || !captionEl) {
+        captionEl?.classList.remove('is-swapping');
+        captionTextEl.textContent = text;
+        return;
+      }
+
+      captionEl.classList.add('is-swapping');
+      captionTimer = setTimeout(() => {
+        captionTextEl.textContent = text;
+        captionEl.classList.remove('is-swapping');
+      }, 170);
+    }
+
+    function render(pos, animate) {
+      const target = Math.max(0, Math.min(pos, realCount + 1));
+      applyPosition(target, animate);
+      const realIndex = realIndexOf(target);
+      updateDots(realIndex);
+      updateCaption(realIndex, animate);
+      if (!animate || reduceMotion) settle();
+    }
+
+    // --- Autoplay: satu timer, tidak pernah menumpuk ---
+    function stopAuto() {
+      if (autoTimer) {
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    function scheduleAuto() {
+      stopAuto();
+      if (reduceMotion || pauseReasons.size > 0) return;
+
+      autoTimer = setTimeout(() => {
+        autoTimer = null;
+        next();
+      }, AUTOPLAY_MS);
+    }
+
+    function pause(reason) {
+      pauseReasons.add(reason);
+      stopAuto();
+    }
+
+    function resume(reason) {
+      if (!pauseReasons.delete(reason)) return;
+      scheduleAuto();
+    }
+
+    // --- Navigasi ---
+    function next() {
+      render(position + 1, true);
+      scheduleAuto();
+    }
+
+    function prev() {
+      render(position - 1, true);
+      scheduleAuto();
+    }
+
+    function goTo(realIndex) {
+      render(realIndex + 1, true);
+      scheduleAuto();
+    }
+
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        goTo(parseInt(dot.dataset.index, 10));
+      });
+    });
+
+    track.addEventListener('transitionend', (event) => {
+      if (event.target !== track || event.propertyName !== 'transform') return;
+      isAnimating = false;
+      settle();
+    });
+
+    // --- Pause saat hover / fokus / tab tidak aktif / di luar layar ---
+    slideshow.addEventListener('mouseenter', () => pause('hover'));
+    slideshow.addEventListener('mouseleave', () => resume('hover'));
+
+    slideshow.addEventListener('focusin', () => pause('focus'));
+    slideshow.addEventListener('focusout', (event) => {
+      if (!slideshow.contains(event.relatedTarget)) resume('focus');
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) pause('hidden');
+      else resume('hidden');
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) resume('offscreen');
+            else pause('offscreen');
+          });
+        },
+        { threshold: 0.35 }
+      );
+      observer.observe(slideshow);
+    }
+
+    // --- Keyboard ---
+    slideshow.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        next();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prev();
+      }
+    });
+
+    // --- Swipe ---
+    let touchStartX = 0;
+    slideshow.addEventListener('touchstart', (event) => {
+      touchStartX = event.touches[0].clientX;
+      pause('touch');
+    }, { passive: true });
+
+    slideshow.addEventListener('touchend', (event) => {
+      const diff = touchStartX - event.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) next();
+        else prev();
+      }
+      resume('touch');
+    }, { passive: true });
+
+    // --- Init ---
+    render(1, false);
+    scheduleAuto();
+  })();
 </script>
