@@ -73,7 +73,7 @@ const siteData = {
     mediaSosial: {
       instagram: "https://www.instagram.com/ponpes_allathifah/",
       facebook: "https://www.facebook.com/pp.allathifah",
-      youtube: "https://www.youtube.com/@ppallathifah2mediaofficial",
+      youtube: "https://www.youtube.com/@yayasan_allathifah",
       tiktok: "https://www.tiktok.com/@lathifah2_mediasetu",
     },
     maps: "https://maps.app.goo.gl/dSofJqu2LvcqBHYn7",
@@ -81,7 +81,7 @@ const siteData = {
   mediaSosial: {
     instagram: "https://www.instagram.com/ponpes_allathifah/",
     facebook: "https://www.facebook.com/pp.allathifah",
-    youtube: "https://www.youtube.com/@ppallathifah2mediaofficial",
+    youtube: "https://www.youtube.com/@yayasan_allathifah",
     tiktok: "https://www.tiktok.com/@lathifah2_mediasetu",
   },
   biaya: {
