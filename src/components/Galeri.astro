@@ -135,61 +135,63 @@ const lastLoopIndex = loopImages.length - 1;
   </div>
 
   <!-- Slideshow -->
-  <div class="relative">
-    <div
-      id="galeri-slideshow"
-      class="overflow-hidden rounded-2xl bg-surface-container-lowest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-      role="region"
-      aria-roledescription="carousel"
-      aria-label="Galeri foto kegiatan santri"
-      tabindex="0"
-    >
+  <div>
+    <div class="relative">
       <div
-        class="flex"
-        id="galeri-track"
-        style="transform: translateX(-100%)"
+        id="galeri-slideshow"
+        class="overflow-hidden rounded-2xl bg-surface-container-lowest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Galeri foto kegiatan santri"
+        tabindex="0"
       >
-        {loopImages.map((img, i) => {
-          const isClone = i === 0 || i === lastLoopIndex;
-          const realIndex = i === 0 ? galeriImages.length - 1 : i === lastLoopIndex ? 0 : i - 1;
-          return (
-            <div
-              class="flex-shrink-0 w-full h-[280px] md:h-[380px] lg:h-[420px] relative overflow-hidden"
-              data-real-index={realIndex}
-              data-caption={img.caption}
-              aria-hidden={isClone ? 'true' : undefined}
-            >
-              <img
-                src={img.src}
-                alt={isClone ? '' : img.alt}
-                class="absolute inset-0 w-full h-full object-cover"
-                loading={realIndex < 2 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" aria-hidden="true"></div>
-            </div>
-          );
-        })}
+        <div
+          class="flex"
+          id="galeri-track"
+          style="transform: translateX(-100%)"
+        >
+          {loopImages.map((img, i) => {
+            const isClone = i === 0 || i === lastLoopIndex;
+            const realIndex = i === 0 ? galeriImages.length - 1 : i === lastLoopIndex ? 0 : i - 1;
+            return (
+              <div
+                class="flex-shrink-0 w-full h-[280px] md:h-[380px] lg:h-[420px] relative overflow-hidden"
+                data-real-index={realIndex}
+                data-caption={img.caption}
+                aria-hidden={isClone ? 'true' : undefined}
+              >
+                <img
+                  src={img.src}
+                  alt={isClone ? '' : img.alt}
+                  class="absolute inset-0 w-full h-full object-cover"
+                  loading={realIndex < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" aria-hidden="true"></div>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
 
-    <!-- Navigation Buttons -->
-    <button
-      id="galeri-prev"
-      class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm text-primary flex items-center justify-center shadow-md hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-      aria-label="Foto sebelumnya"
-      type="button"
-    >
-      <span class="material-symbols-outlined text-[24px]">chevron_left</span>
-    </button>
-    <button
-      id="galeri-next"
-      class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm text-primary flex items-center justify-center shadow-md hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-      aria-label="Foto selanjutnya"
-      type="button"
-    >
-      <span class="material-symbols-outlined text-[24px]">chevron_right</span>
-    </button>
+      <!-- Navigation Buttons -->
+      <button
+        id="galeri-prev"
+        class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full bg-primary/70 backdrop-blur-sm text-white ring-1 ring-white/30 shadow-lg shadow-black/20 flex items-center justify-center hover:bg-primary/90 hover:ring-white/50 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+        aria-label="Foto sebelumnya"
+        type="button"
+      >
+        <span class="material-symbols-outlined text-[24px]">chevron_left</span>
+      </button>
+      <button
+        id="galeri-next"
+        class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full bg-primary/70 backdrop-blur-sm text-white ring-1 ring-white/30 shadow-lg shadow-black/20 flex items-center justify-center hover:bg-primary/90 hover:ring-white/50 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+        aria-label="Foto selanjutnya"
+        type="button"
+      >
+        <span class="material-symbols-outlined text-[24px]">chevron_right</span>
+      </button>
+    </div>
 
     <!-- Caption -->
     <div class="flex justify-center mt-3 px-2">
