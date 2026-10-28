@@ -1,0 +1,23 @@
+{
+  "name": "PSB Pondok Pesantren Al-Lathifah 2",
+  "short_name": "PSB Al-Lathifah 2",
+  "description": "Penerimaan Santri Baru Tahun Ajaran 2027/2028",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0fdf3",
+  "theme_color": "#0B3D2E",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
