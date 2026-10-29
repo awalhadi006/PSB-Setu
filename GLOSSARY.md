@@ -19,12 +19,14 @@ nominals per category (Umum/Dhuafa/Yatim). Single source of truth for totals:
 5,150,000 / 2,800,000 / 900,000.
 
 **Biaya Counters** - `animateBiayaPanel(tab)`: `requestAnimationFrame` loop that
-eases **every** rupiah figure in a panel from 0 to its target. Rows stagger 55 ms
-apart (900 ms each) and the total lands last (1100 ms). Targets are cached in
-`data-target` from the rendered HTML, so there is no second source of truth.
-`GRATIS` rows are skipped. Fires once via `IntersectionObserver` when `#biaya`
-first becomes visible, and again on every tab switch. `prefers-reduced-motion`
-skips it entirely.
+eases **every** rupiah figure in a panel from 0 to its target over 1.7 s
+(ease-out). Line items and the total run at the same time and settle together, so
+the panel reads as one movement. Targets are cached in `data-target` from the
+rendered HTML, so there is no second source of truth; `GRATIS` rows are skipped.
+The first run is triggered by an `IntersectionObserver` on the active panel
+(threshold 0.45) — watching the whole `#biaya` section fired while the figures
+were still below the fold. Tab switches re-run it.
+`prefers-reduced-motion: reduce` lands on the final numbers without counting.
 
 **Bundled Entry Script** - The one `<script>` written in `index.astro`. Vite
 compiles it to `/_astro/index.<hash>.js` (about 5 KB). It contains the FAQ,
@@ -71,7 +73,8 @@ query stops matching.
 **Header Pinning** - `updateHeader()` toggles the `hidden` class only when
 `scrollY <= 4`, so the bar is invisible at the very top of the page and stays
 pinned for the whole scroll. The old `-translate-y-full` auto-hide on scroll-down
-was removed.
+was removed. In-page jumps clear the bar because `section[id]` carries
+`scroll-margin-top: 5rem`.
 
 **Hero Entrance** - CSS-only keyframes (`hero-rise`) staggered from the status
 chip to the CTA: `.hero-status` 0 ms, `.hero-badge` 70 ms, `.hero-title` 140 ms,
@@ -173,6 +176,9 @@ canvas. The hero is a photo with an SVG pattern. See ADR-0009 (Rejected).
 
 ## W
 
-**WA FAB** - Floating WhatsApp button (bottom-right). Pulsing scale animation via
-GSAP; opens `#wa-overlay`, a panel with two contact links that locks body scroll
-and closes on Escape or backdrop click.
+**WA FAB** - Floating WhatsApp button (bottom-right). Its anchor sits 1.5 rem
+(24 px) from the corner on mobile and 2 rem on desktop, plus
+`env(safe-area-inset-*)` so it clears the iOS home indicator. Pulsing scale
+animation via GSAP; opens `#wa-overlay`, a panel with two contact links that
+locks body scroll and closes on Escape or backdrop click. The footer copyright
+keeps a right padding on mobile so the FAB never covers it.

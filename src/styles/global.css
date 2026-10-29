@@ -156,6 +156,11 @@
     @apply w-full px-gutter-mobile py-space-xl flex flex-col gap-space-lg;
   }
 
+  /* In-page jumps must clear the pinned header, which stays visible on scroll */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
   .section-header {
     @apply flex flex-col items-center text-center gap-1;
   }
@@ -665,7 +670,7 @@
   }
 
   .footer-copyright {
-    @apply pt-space-md border-t border-primary-container/40 flex flex-col gap-1;
+    @apply pt-space-md border-t border-primary-container/40 flex flex-col gap-1 pr-20 md:pr-0;
   }
 
   .footer-copyright-main {

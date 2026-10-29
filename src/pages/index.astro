@@ -65,7 +65,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
   </main>
 
   <!-- Fixed WhatsApp FAB with Overlay -->
-  <aside class="fixed right-4 z-40 bottom-3">
+  <aside class="wa-fab-anchor fixed z-40">
     <button
       id="wa-fab-btn"
       aria-label="Chat WhatsApp Panitia PSB"
@@ -256,8 +256,9 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       animateBiayaPanel(tabName);
     }
 
-    // 4. Biaya counters: smooth count-up for each line item and the total
+    // 4. Biaya counters: smooth count-up for every line item and the total
     var biayaAnimations = {};
+    var BIAYA_DURATION = 1700;
 
     function biayaTarget(el) {
       // Cache the value that is rendered in the HTML, so no data file is needed
@@ -272,43 +273,32 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       var panel = document.getElementById('content-' + tabName);
       if (!panel) return;
 
-      // Line items are staggered bottom-up so the eye follows the list, and the
-      // total lands last. GRATIS rows keep their static text.
-      var rows = Array.prototype.slice.call(
-        panel.querySelectorAll('.biaya-row-value:not(.biaya-row-value-free)')
+      // Line items and the total all start together and finish together, so the
+      // panel reads as one movement instead of two separate waves.
+      // GRATIS rows keep their static text.
+      var els = Array.prototype.slice.call(
+        panel.querySelectorAll('.biaya-row-value:not(.biaya-row-value-free), .biaya-total-value')
       );
-      var totalEl = panel.querySelector('.biaya-total-value');
+      if (els.length === 0) return;
 
-      var targets = rows.map(function(el) {
-        return { el: el, value: biayaTarget(el), delay: 0, duration: 900 };
+      var targets = els.map(function(el) {
+        return { el: el, value: biayaTarget(el) };
       });
-      if (totalEl) {
-        targets.push({
-          el: totalEl,
-          value: biayaTarget(totalEl),
-          delay: rows.length * 55,
-          duration: 1100,
-        });
-      }
-      if (targets.length === 0) return;
 
       // Cancel a previous run for this panel so rapid tab clicks stay readable
       if (biayaAnimations[tabName]) cancelAnimationFrame(biayaAnimations[tabName]);
 
+      // Reduced motion: land on the real numbers without counting
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var start = performance.now();
-      var longest = Math.max.apply(
-        null,
-        targets.map(function(t) { return t.delay + t.duration; })
-      );
 
       var frame = function(now) {
-        var elapsed = now - start;
+        var progress = reduce ? 1 : Math.min((now - start) / BIAYA_DURATION, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
         targets.forEach(function(t) {
-          var progress = Math.min(Math.max((elapsed - t.delay) / t.duration, 0), 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
           t.el.textContent = 'Rp' + Math.round(t.value * eased).toLocaleString('id-ID');
         });
-        if (elapsed < longest) {
+        if (progress < 1) {
           biayaAnimations[tabName] = requestAnimationFrame(frame);
         } else {
           delete biayaAnimations[tabName];
@@ -391,24 +381,30 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     window.switchBiayaTab = switchBiayaTab;
     window.toggleFaq = toggleFaq;
 
-    // 9. Count the biaya figures up the first time the section is seen, so the
-    //    animation happens in front of the user instead of off-screen at load.
+    // 9. Count the biaya figures up the first time the panel is actually seen.
+    //    The observer watches the panel, not #biaya: the section header and the
+    //    tabs sit above the figures, so watching the section fired while the
+    //    numbers were still below the fold and the count-up played off-screen.
     function initBiayaCounters() {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var section = document.getElementById('biaya');
-      if (!section || !('IntersectionObserver' in window)) return;
+      var active = document.querySelector('.biaya-tab-btn.active');
+      var tabName = active ? active.id.replace('tab-btn-', '') : 'umum';
+      var panel = document.getElementById('content-' + tabName);
+      if (!panel) return;
+
+      if (!('IntersectionObserver' in window)) {
+        animateBiayaPanel(tabName);
+        return;
+      }
 
       var observer = new IntersectionObserver(
         function(entries) {
           if (!entries.some(function(e) { return e.isIntersecting; })) return;
           observer.disconnect();
-          var active = document.querySelector('.biaya-tab-btn.active');
-          var tabName = active ? active.id.replace('tab-btn-', '') : 'umum';
           animateBiayaPanel(tabName);
         },
-        { threshold: 0.2 }
+        { threshold: 0.45, rootMargin: '0px 0px -10% 0px' }
       );
-      observer.observe(section);
+      observer.observe(panel);
     }
 
     initBiayaCounters();
@@ -438,6 +434,19 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
 </BaseLayout>
 
 <style is:global>
+  /* WhatsApp FAB anchor: a comfortable gap from the corner, plus the iOS
+     home-indicator inset (the viewport uses viewport-fit=cover). */
+  .wa-fab-anchor {
+    right: calc(1.5rem + env(safe-area-inset-right, 0px));
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  @media (min-width: 768px) {
+    .wa-fab-anchor {
+      right: calc(2rem + env(safe-area-inset-right, 0px));
+      bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
   #wa-overlay .wa-panel {
     position: absolute;
     bottom: 1rem;
