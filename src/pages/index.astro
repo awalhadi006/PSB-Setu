@@ -256,9 +256,13 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       animateBiayaPanel(tabName);
     }
 
-    // 4. Biaya counters: smooth count-up for every line item and the total
+    // 4. Biaya counters: the figures flicker through random digits, then resolve
+    //    into the real value. It is not a 0-to-value count: every figure keeps
+    //    its own length and separators, so nothing jumps while the numbers spin.
     var biayaAnimations = {};
-    var BIAYA_DURATION = 3000;
+    var BIAYA_SPIN_MS = 1200;   // pure random digits
+    var BIAYA_LOCK_MS = 800;    // digits resolve left to right
+    var BIAYA_TICK_MS = 55;     // how often the random digits change
 
     function biayaTarget(el) {
       // Cache the value that is rendered in the HTML, so no data file is needed
@@ -269,41 +273,88 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       return parseInt(el.dataset.target, 10) || 0;
     }
 
+    // Swap every not-yet-locked digit for a random one, keeping "Rp" and the
+    // thousands separators in place so the figure never changes width.
+    function scrambleFigure(realText, locked) {
+      var out = '';
+      var seen = 0;
+      for (var i = 0; i < realText.length; i++) {
+        var ch = realText.charAt(i);
+        if (ch < '0' || ch > '9') {
+          out += ch;
+          continue;
+        }
+        if (seen < locked) {
+          out += ch;
+        } else if (seen === 0) {
+          // Never lead with a 0: it would read as a malformed amount
+          out += String(1 + Math.floor(Math.random() * 9));
+        } else {
+          out += String(Math.floor(Math.random() * 10));
+        }
+        seen++;
+      }
+      return out;
+    }
+
     function animateBiayaPanel(tabName) {
       var panel = document.getElementById('content-' + tabName);
       if (!panel) return;
 
-      // Line items and the total all start together and finish together, so the
-      // panel reads as one movement instead of two separate waves.
-      // GRATIS rows keep their static text.
+      // Every figure spins at the same time. GRATIS rows keep their static text.
       var els = Array.prototype.slice.call(
         panel.querySelectorAll('.biaya-row-value:not(.biaya-row-value-free), .biaya-total-value')
       );
       if (els.length === 0) return;
 
       var targets = els.map(function(el) {
-        return { el: el, value: biayaTarget(el) };
+        var value = biayaTarget(el);
+        var text = 'Rp' + value.toLocaleString('id-ID');
+        return {
+          el: el,
+          text: text,
+          digits: text.replace(/\D/g, '').length,
+          locked: -1,
+        };
       });
 
       // Cancel a previous run for this panel so rapid tab clicks stay readable
       if (biayaAnimations[tabName]) cancelAnimationFrame(biayaAnimations[tabName]);
 
-      // Reduced motion: land on the real numbers without counting
+      // Reduced motion: show the real numbers straight away
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var total = BIAYA_SPIN_MS + BIAYA_LOCK_MS;
       var start = performance.now();
+      var lastRender = 0;
 
       var frame = function(now) {
-        var progress = reduce ? 1 : Math.min((now - start) / BIAYA_DURATION, 1);
-        // ease-out sine: a gentler start than ease-out cubic, so the digits do
-        // not race through most of the value in the first few hundred ms
-        var eased = reduce ? 1 : Math.sin(progress * Math.PI / 2);
+        var elapsed = now - start;
+        var done = reduce || elapsed >= total;
+        var lockProgress = reduce ? 1 : Math.min(
+          Math.max((elapsed - BIAYA_SPIN_MS) / BIAYA_LOCK_MS, 0),
+          1
+        );
+        var tick = now - lastRender >= BIAYA_TICK_MS;
+
         targets.forEach(function(t) {
-          t.el.textContent = 'Rp' + Math.round(t.value * eased).toLocaleString('id-ID');
+          if (done) {
+            if (t.locked !== t.digits) {
+              t.locked = t.digits;
+              t.el.textContent = t.text;
+            }
+            return;
+          }
+          var locked = Math.floor(lockProgress * t.digits);
+          if (!tick && locked === t.locked) return;
+          t.locked = locked;
+          t.el.textContent = scrambleFigure(t.text, locked);
         });
-        if (progress < 1) {
-          biayaAnimations[tabName] = requestAnimationFrame(frame);
-        } else {
+
+        if (done) {
           delete biayaAnimations[tabName];
+        } else {
+          if (tick) lastRender = now;
+          biayaAnimations[tabName] = requestAnimationFrame(frame);
         }
       };
       biayaAnimations[tabName] = requestAnimationFrame(frame);

@@ -18,19 +18,20 @@ loading. Used for the gallery, the map placeholder and the hero renditions.
 nominals per category (Umum/Dhuafa/Yatim). Single source of truth for totals:
 5,150,000 / 2,800,000 / 900,000.
 
-**Biaya Counters** - `animateBiayaPanel(tab)`: `requestAnimationFrame` loop that
-eases **every** rupiah figure in a panel from 0 to its target over 3 s
-(ease-out sine, so the digits do not race through the value at the start). Line items and the total run at the same time and settle together, so
-the panel reads as one movement. Targets are cached in `data-target` from the
-rendered HTML, so there is no second source of truth; `GRATIS` rows are skipped.
-The first run is triggered by an `IntersectionObserver` on the active panel
-(threshold 0.45) — watching the whole `#biaya` section fired while the figures
-were still below the fold. Tab switches re-run it.
-`prefers-reduced-motion: reduce` lands on the final numbers without counting.
+**Biaya Scramble** - `animateBiayaPanel(tab)`: every rupiah figure in a panel
+spins through random digits for 1.2 s, then its digits lock from left to right
+over 0.8 s and land on the exact value. It is not a 0-to-value count: the figure
+keeps its own length, `Rp` prefix and thousands separators (and never starts with
+a 0), so the row never changes width. The real strings come from `data-target`
+parsed out of the rendered HTML, so there is no second source of truth; `GRATIS`
+rows are skipped. The first run is triggered by an `IntersectionObserver` on the
+active panel (threshold 0.45) — watching the whole `#biaya` section fired while
+the figures were still below the fold. Tab switches re-run it.
+`prefers-reduced-motion: reduce` shows the real numbers immediately.
 
 **Bundled Entry Script** - The one `<script>` written in `index.astro`. Vite
 compiles it to `/_astro/index.<hash>.js` (about 5 KB). It contains the FAQ,
-biaya tabs and counters, header visibility, gallery wiring, WhatsApp overlay and
+biaya tabs and the figure scramble, header visibility, gallery wiring, WhatsApp overlay and
 the bootstrap for GSAP. See ADR-0002.
 
 ---

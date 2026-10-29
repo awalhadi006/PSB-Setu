@@ -5,8 +5,8 @@ Accepted (replaces "dynamic imports from a CDN + .js-ready")
 
 ## Context
 The page needs a small amount of JavaScript: a FAQ accordion, a biaya tab
-switcher, a count-up animation, a header auto-hide on scroll, a gallery slider,
-a WhatsApp overlay, and GSAP-driven decoration.
+switcher, a digit-scramble animation for the biaya figures, header visibility, a
+gallery slider, a WhatsApp overlay, and GSAP-driven decoration.
 
 The first implementation split this across `src/scripts/main.ts`,
 `src/scripts/gsap-animations.ts` and a `three-hero.ts` (never used), loaded GSAP

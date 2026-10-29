@@ -24,7 +24,7 @@ Register only what runs, and keep a single responsive split:
 | Hero entrance | CSS only: staggered `opacity`/`translateY`, starts at first paint | same |
 | Jadwal steps | `scrub: 0.5`, steps 2-4 pre-hidden | same |
 | Card hover / tap lift | `touchstart`/`touchend` lift | `mouseenter`/`mouseleave` lift |
-| Biaya counters | every figure counts up together (3 s, ease-out) | same |
+| Biaya figures | spin through random digits, then lock on the real value (2 s) | same |
 | WhatsApp FAB | infinite `yoyo` pulse | same |
 
 - The hero entrance is deliberately **not** GSAP: waiting for a ~40 KB chunk
@@ -35,15 +35,17 @@ Register only what runs, and keep a single responsive split:
 - Card lift covers `.syarat-item`, `.step-card` (alur pendaftaran),
   `.card-elevated*`, `.card-surface-low`, `.narahubung-card`, `.biaya-content`,
   `.misi-card`, `.galeri-card`.
-- Biaya counters run on an `IntersectionObserver` that watches the **active
+- Biaya figures run on an `IntersectionObserver` that watches the **active
   panel**, not `#biaya`: the section header and tabs sit above the figures, so a
   section-level threshold fired while the numbers were still below the fold.
-  Line items and the total now start together and land together over 3 s with an
-ease-out sine curve, which keeps the digit churn readable instead of burning
-through the value in the first half second.
+  Each figure spins through random digits for 1.2 s, then its digits lock from
+  left to right over 0.8 s and land on the exact value rendered in the HTML.
+  It is deliberately not a 0-to-value count: the figure keeps its length and
+  separators, so the row never changes width and nothing is implied about the
+  amount until it resolves.
   `switchBiayaTab()` re-runs the same animation for the chosen panel.
-- `prefers-reduced-motion: reduce` returns before any tween or counter is
-  created, so the final state is whatever the HTML says (no hidden content).
+- `prefers-reduced-motion: reduce` returns before any tween is created, so the
+  final state is whatever the HTML says (no hidden content).
 - Dead tweens (section reveal, timeline draw) were deleted rather than fixed:
   re-adding `.container` wrappers to 10 components would change layout.
 - GSAP itself is code-split and only fetched after `load` (see ADR-0002).
