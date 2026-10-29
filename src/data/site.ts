@@ -1,7 +1,18 @@
+// Address split into its parts so the same data can render both the human
+// readable single line (`alamat`) and the structured PostalAddress in JSON-LD.
+const alamatStruktur = {
+  jalan: "Jl. Pasar Kojengkang, Kp. Sawah RT. 02 RW. 08",
+  desa: "Cikarageman",
+  kecamatan: "Setu",
+  kabupaten: "Kab. Bekasi",
+  provinsi: "Jawa Barat",
+};
+
 const siteData = {
   nama: "Pondok Pesantren Al-Lathifah 2",
   tagline: "Lebih Baik Pesantren, Pesantren Lebih Baik",
-  alamat: "Jl. Pasar Kojengkang, Kp. Sawah RT. 02 RW. 08, Ds. Cikarageman, Kec. Setu, Kab. Bekasi, Jawa Barat",
+  alamatStruktur,
+  alamat: `${alamatStruktur.jalan}, Ds. ${alamatStruktur.desa}, Kec. ${alamatStruktur.kecamatan}, ${alamatStruktur.kabupaten}, ${alamatStruktur.provinsi}`,
   kontak: {
     whatsapp: {
       nomor: "6289679313820",
@@ -13,7 +24,8 @@ const siteData = {
       nama: "Ust. Aldi Wahid Alfaini, S.Li, Gr",
       pesanAwal: "Assalamualaikum, saya ingin bertanya tentang penerimaan santri baru Al-Lathifah 2",
     },
-    website: "www.yayasanallathifah.com",
+    // Live deployment. `site` in astro.config.mjs must match this host.
+    website: "psb.smpallathifah.my.id",
     email: "pp.allathifah@gmail.com",
     mediaSosial: {
       instagram: "https://www.instagram.com/ponpes_allathifah/",
@@ -67,6 +79,14 @@ const siteData = {
         "Biaya masuk pesantren dilunasi ketika daftar ulang.",
       ],
     },
+  },
+  // ── SEO ────────────────────────────────────────────────────────────────
+  seo: {
+    // Google Search Console → Settings → Ownership verification → HTML tag.
+    // Paste ONLY the value of content="..." here, then rebuild + redeploy.
+    googleSiteVerification: "",
+    // 1200x630 card used for WhatsApp/Facebook/X link previews.
+    ogImage: "/og-default.jpg",
   },
   tahunAjaran: "2027-2028",
 };

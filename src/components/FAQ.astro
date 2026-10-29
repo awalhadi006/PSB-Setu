@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { faqItems } from '../data/faq';
 ---
 
 <section id="faq" class="section bg-surface-container-lowest text-on-surface" aria-labelledby="faq-title">
@@ -12,89 +13,28 @@ import Icon from './Icon.astro';
 
   <!-- Accordion List -->
   <div class="flex flex-col gap-2.5">
-    <div class="faq-item">
-      <button
-        class="faq-trigger"
-        aria-expanded="false"
-        aria-controls="faq-answer-0"
-        id="faq-trigger-0"
-        onclick="toggleFaq(this)"
-        type="button"
-      >
-        <span class="faq-question">Bagaimana sistem pendidikan formalnya?</span>
-        <Icon class="faq-icon" name="expand_more" style="transform: rotate(0deg);" />
-      </button>
-      <div
-        id="faq-answer-0"
-        class="faq-answer hidden"
-        role="region"
-        aria-labelledby="faq-trigger-0"
-      >
-        Santri mengikuti pendidikan formal SMP/MTs, SMA/MA yang terakreditasi B di lingkungan pondok (kelas khusus santri). Jam pelajaran formal full day pukul 08.00–14.50 WIB, tahfidz & keagamaan sore hingga malam.
+    {faqItems.map((item, i) => (
+      <div class="faq-item">
+        <button
+          class="faq-trigger"
+          aria-expanded="false"
+          aria-controls={`faq-answer-${i}`}
+          id={`faq-trigger-${i}`}
+          onclick="toggleFaq(this)"
+          type="button"
+        >
+          <span class="faq-question">{item.question}</span>
+          <Icon class="faq-icon" name="expand_more" />
+        </button>
+        <div
+          id={`faq-answer-${i}`}
+          class="faq-answer hidden"
+          role="region"
+          aria-labelledby={`faq-trigger-${i}`}
+        >
+          {item.answer}
+        </div>
       </div>
-    </div>
-    <div class="faq-item">
-      <button
-        class="faq-trigger"
-        aria-expanded="false"
-        aria-controls="faq-answer-1"
-        id="faq-trigger-1"
-        onclick="toggleFaq(this)"
-        type="button"
-      >
-        <span class="faq-question">Apakah boleh membawa HP / gadget pribadi?</span>
-        <Icon class="faq-icon" name="expand_more" style="transform: rotate(0deg);" />
-      </button>
-      <div
-        id="faq-answer-1"
-        class="faq-answer hidden"
-        role="region"
-        aria-labelledby="faq-trigger-1"
-      >
-        Tidak diperbolehkan membawa HP/gadget pribadi. Komunikasi dengan orang tua via telepon umum pondok (tersedia di setiap asrama) atau jadwal video call mingguan yang disediakan pondok.
-      </div>
-    </div>
-    <div class="faq-item">
-      <button
-        class="faq-trigger"
-        aria-expanded="false"
-        aria-controls="faq-answer-2"
-        id="faq-trigger-2"
-        onclick="toggleFaq(this)"
-        type="button"
-      >
-        <span class="faq-question">Kapan kunjungan orang tua (Silaturahmi)?</span>
-        <Icon class="faq-icon" name="expand_more" style="transform: rotate(0deg);" />
-      </button>
-      <div
-        id="faq-answer-2"
-        class="faq-answer hidden"
-        role="region"
-        aria-labelledby="faq-trigger-2"
-      >
-        Silaturahmi boleh setiap minggu, pukul 09.00–15.00 WIB. Diluar jadwal tersebut memerlukan izin tertulis Bagian Pengasuhan Santri. Khusus bulan Ramadhan & hari besar Islam: jadwal khusus diinformasikan via WA broadcast.
-      </div>
-    </div>
-    <div class="faq-item">
-      <button
-        class="faq-trigger"
-        aria-expanded="false"
-        aria-controls="faq-answer-3"
-        id="faq-trigger-3"
-        onclick="toggleFaq(this)"
-        type="button"
-      >
-        <span class="faq-question">Apakah ada biaya tersembunyi selain yang tercantum?</span>
-        <Icon class="faq-icon" name="expand_more" style="transform: rotate(0deg);" />
-      </button>
-      <div
-        id="faq-answer-3"
-        class="faq-answer hidden"
-        role="region"
-        aria-labelledby="faq-trigger-3"
-      >
-        Tidak ada biaya tersembunyi. Semua biaya wajib tercantum detail di halaman Biaya (Umum/Dhuafa/Yatim). Biaya opsional (foto kenangan, baju lomba, souvenir, dana sosial, dll) diinformasikan terpisah sebelum kegiatan.
-      </div>
-    </div>
+    ))}
   </div>
 </section>

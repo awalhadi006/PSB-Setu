@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Halaman Tidak Ditemukan"
+  description="Halaman yang Anda cari tidak tersedia."
+  canonicalPath="/404"
+  noindex
+>
+  <main class="flex-1 flex items-center justify-center px-6 py-20 bg-surface text-on-surface">
+    <div class="max-w-lg text-center flex flex-col items-center gap-4">
+      <span class="section-label">Error 404</span>
+      <h1 class="font-headline-sm text-[32px] leading-tight">Halaman tidak ditemukan</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">
+        Alamat yang Anda buka tidak tersedia atau sudah dipindahkan. Silakan kembali ke
+        halaman penerimaan santri baru.
+      </p>
+      <a
+        href="/"
+        class="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-title-md text-title-md text-on-primary hover:opacity-90 transition-opacity"
+      >
+        Kembali ke Beranda
+      </a>
+    </div>
+  </main>
+</BaseLayout>

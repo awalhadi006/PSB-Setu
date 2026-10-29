@@ -132,6 +132,44 @@ See `docs/adr/` for Architecture Decision Records:
 
 ---
 
+## SEO & Indexing
+
+The site is built to be crawled and indexed out of the box:
+
+| Piece | Where it comes from |
+|---|---|
+| Canonical / OG / Twitter / JSON-LD absolute URLs | `site:` in `astro.config.mjs` (via `Astro.site`) |
+| `<meta name="robots">` | `BaseLayout.astro` (`noindex` prop for error pages) |
+| `EducationalOrganization` + `WebSite` schema | `BaseLayout.astro` (auto on every page) |
+| `FAQPage` schema | `src/data/faq.ts` → rendered by `FAQ.astro` **and** `index.astro` |
+| `robots.txt` + `Sitemap:` line | `src/pages/robots.txt.ts` |
+| `sitemap-index.xml` / `sitemap-0.xml` | `@astrojs/sitemap` |
+| Social share card 1200×630 | `public/og-default.jpg` |
+| Real 404 status | `src/pages/404.astro` + no catch-all in `public/_redirects` |
+
+### Turning on Google Search Console
+
+1. Deploy first — `https://psb.smpallathifah.my.id/robots.txt` and
+   `/sitemap-index.xml` must both return 200.
+2. Search Console → **Add property** → *Domain* → verify with a DNS TXT record
+   at the `my.id` DNS provider (covers apex + `www`).
+3. Sitemaps → submit `sitemap-index.xml`.
+4. URL Inspection → `https://psb.smpallathifah.my.id/` → **Request Indexing**.
+
+If you verify with the **HTML tag** method instead, paste only the token into
+`site.seo.googleSiteVerification` in `src/data/site.ts`, rebuild, redeploy.
+
+### Rules to keep
+
+- **Never** add a catch-all `/* /index.html 200` rule back to `_redirects` —
+  it answers every fake URL with 200 and Google treats those as soft 404s.
+- Any new page must be reachable by a real `<a href>`, not JS-only navigation,
+  or it will not be crawled.
+- Keep `site:` in `astro.config.mjs` and `kontak.website` in `site.ts` on the
+  same host.
+
+---
+
 ## Glossary
 
 See `GLOSSARY.md` for consolidated domain terms.
@@ -158,6 +196,9 @@ Before deploying, verify:
 - [ ] FAQ icon rotates, gallery arrows change slide, biaya tabs switch
 - [ ] JS disabled: all content visible
 - [ ] `prefers-reduced-motion`: all content visible, no animation
+- [ ] `/robots.txt` and `/sitemap-index.xml` return 200 after deploy
+- [ ] View source: canonical + `og:url` use `https://psb.smpallathifah.my.id`
+- [ ] Unknown URL (e.g. `/tes-404`) returns HTTP 404, not the homepage
 
 ---
 

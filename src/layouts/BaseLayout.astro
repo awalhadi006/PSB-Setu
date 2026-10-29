@@ -3,30 +3,94 @@ import { site } from '../data/site';
 import { heroSrc, heroSrcset, heroSizes } from '../utils/hero-image';
 import '../styles/global.css';
 
-const props = Astro.props;
-const title = props.title;
-const description = props.description;
-const canonicalPath = props.canonicalPath || '/';
-const ogImage = props.ogImage || '/og-default.jpg';
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  ogImage?: string;
+  /** Extra schema.org nodes (e.g. FAQPage) appended to the site-wide graph. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Set true for error pages and anything that must stay out of the index. */
+  noindex?: boolean;
+}
 
-const baseUrl = `https://${site.kontak.website}`;
-const canonicalUrl = new URL(canonicalPath, baseUrl).toString();
-const fullOgImageUrl = new URL(ogImage, baseUrl).toString();
+const {
+  title,
+  description,
+  canonicalPath = '/',
+  ogImage = site.seo.ogImage,
+  jsonLd,
+  noindex = false,
+} = Astro.props;
+
+// `Astro.site` comes from astro.config.mjs, so canonical/OG/JSON-LD URLs can
+// never drift from the configured domain.
+const baseUrl = (Astro.site ?? new URL(`https://${site.kontak.website}`)).toString().replace(/\/$/, '');
+const canonicalUrl = new URL(canonicalPath, `${baseUrl}/`).toString();
+const fullOgImageUrl = new URL(ogImage, `${baseUrl}/`).toString();
 const pageTitle = `${title} | ${site.nama}`;
+
+const { alamatStruktur, kontak } = site;
+
+const organizationLd = {
+  '@type': 'EducationalOrganization',
+  '@id': `${baseUrl}/#organization`,
+  name: site.nama,
+  alternateName: 'PSB Al-Lathifah 2',
+  url: `${baseUrl}/`,
+  logo: `${baseUrl}/favicon-512.png`,
+  image: fullOgImageUrl,
+  email: kontak.email,
+  telephone: `+${kontak.whatsapp.nomor}`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: alamatStruktur.jalan,
+    addressLocality: alamatStruktur.desa,
+    addressRegion: `${alamatStruktur.kecamatan}, ${alamatStruktur.kabupaten}, ${alamatStruktur.provinsi}`,
+    addressCountry: 'ID',
+  },
+  hasMap: kontak.maps,
+  sameAs: [
+    kontak.mediaSosial.instagram,
+    kontak.mediaSosial.facebook,
+    kontak.mediaSosial.youtube,
+    kontak.mediaSosial.tiktok,
+  ],
+};
+
+const websiteLd = {
+  '@type': 'WebSite',
+  '@id': `${baseUrl}/#website`,
+  url: `${baseUrl}/`,
+  name: site.nama,
+  inLanguage: 'id-ID',
+  publisher: { '@id': `${baseUrl}/#organization` },
+};
+
+const extraLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [organizationLd, websiteLd, ...extraLd],
+};
 ---
 
 <!doctype html>
 <html class="light" lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="shell-type" content="mobile_tab" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
     <link rel="canonical" href={canonicalUrl} />
+
+    {site.seo.googleSiteVerification && (
+      <meta name="google-site-verification" content={site.seo.googleSiteVerification} />
+    )}
 
     <meta name="theme-color" content="#0B3D2E" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0B3D2E" media="(prefers-color-scheme: dark)" />
@@ -37,8 +101,20 @@ const pageTitle = `${title} | ${site.nama}`;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={fullOgImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.nama} - ${site.tagline}`} />
     <meta property="og:site_name" content={site.nama} />
     <meta property="og:locale" content="id_ID" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullOgImageUrl} />
+
+    <!-- Structured data (schema.org) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
 
     <!-- Favicons (optimized sizes from Logo.png) -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />

@@ -16,12 +16,24 @@ import Kontak from '../components/Kontak.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
+import { faqItems } from '../data/faq';
 
 const title = 'Penerimaan Santri Baru';
 const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tahunAjaran} - ${site.tagline}`;
+
+// FAQPage markup built from the same array FAQ.astro renders, so the visible
+// accordion and the structured data can never disagree.
+const faqLd = {
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} jsonLd={faqLd}>
   <Navbar />
 
   <main class="flex flex-col relative w-full pt-0 bg-surface min-h-screen">
@@ -176,7 +188,8 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       // ==========================================
       var cards = document.querySelectorAll('.card-elevated, .card-elevated-lg, .card-surface-low, .syarat-item, .almamater-item, .narahubung-card, .biaya-content, .misi-card, .galeri-card, .step-card');
       cards.forEach(function(card) {
-        var hoverTween = null;
+        // Kept as `any`: a GSAP tween handle, only ever used for .kill().
+        var hoverTween: any = null;
         
         card.addEventListener('mouseenter', function() {
           hoverTween = gsap.to(card, {
@@ -235,7 +248,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     }
 
     // 3. Tab switcher for Rincian Biaya
-    function switchBiayaTab(tabName) {
+    function switchBiayaTab(tabName: string) {
       var tabs = ['umum', 'dhuafa', 'yatim'];
       tabs.forEach(function(t) {
         var btn = document.getElementById('tab-btn-' + t);
@@ -274,13 +287,13 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     // 4. Biaya figures: the numbers flicker through random digits, then resolve
     //    into the real value. It is not a 0-to-value count: every figure keeps
     //    its own length and separators, so nothing jumps while the numbers spin.
-    var biayaAnimations = {};
-    var biayaPlayed = {};       // tabName -> true once its figures have scrambled
+    var biayaAnimations: Record<string, number> = {};
+    var biayaPlayed: Record<string, boolean> = {};       // tabName -> true once its figures have scrambled
     var BIAYA_SPIN_MS = 1200;   // pure random digits
     var BIAYA_LOCK_MS = 800;    // digits resolve left to right
     var BIAYA_TICK_MS = 55;     // how often the random digits change
 
-    function biayaTarget(el) {
+    function biayaTarget(el: HTMLElement) {
       // Cache the value that is rendered in the HTML, so no data file is needed
       if (!el.dataset.target) {
         var text = el.textContent || '';
@@ -291,7 +304,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
 
     // Swap every not-yet-locked digit for a random one, keeping "Rp" and the
     // thousands separators in place so the figure never changes width.
-    function scrambleFigure(realText, locked) {
+    function scrambleFigure(realText: string, locked: number) {
       var out = '';
       var seen = 0;
       for (var i = 0; i < realText.length; i++) {
@@ -313,7 +326,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       return out;
     }
 
-    function animateBiayaPanel(tabName) {
+    function animateBiayaPanel(tabName: string) {
       var panel = document.getElementById('content-' + tabName);
       if (!panel) return;
 
@@ -324,10 +337,10 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       // Every figure spins at the same time. GRATIS rows keep their static text.
       var els = Array.prototype.slice.call(
         panel.querySelectorAll('.biaya-row-value:not(.biaya-row-value-free), .biaya-total-value')
-      );
+      ) as HTMLElement[];
       if (els.length === 0) return;
 
-      var targets = els.map(function(el) {
+      var targets = els.map(function(el: HTMLElement) {
         var value = biayaTarget(el);
         var text = 'Rp' + value.toLocaleString('id-ID');
         return {
@@ -347,7 +360,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       var start = performance.now();
       var lastRender = 0;
 
-      var frame = function(now) {
+      var frame = function(now: number) {
         var elapsed = now - start;
         var done = reduce || elapsed >= total;
         var lockProgress = reduce ? 1 : Math.min(
@@ -381,7 +394,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     }
 
     // Put a panel straight on its real numbers (and stop any run in flight).
-    function settleBiayaPanel(tabName) {
+    function settleBiayaPanel(tabName: string) {
       if (biayaAnimations[tabName]) {
         cancelAnimationFrame(biayaAnimations[tabName]);
         delete biayaAnimations[tabName];
@@ -391,25 +404,25 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       var els = panel.querySelectorAll(
         '.biaya-row-value:not(.biaya-row-value-free), .biaya-total-value'
       );
-      Array.prototype.forEach.call(els, function(el) {
+      Array.prototype.forEach.call(els, function(el: HTMLElement) {
         el.textContent = 'Rp' + biayaTarget(el).toLocaleString('id-ID');
       });
     }
 
     // 5. Accordion toggle for FAQ
-    function toggleFaq(button) {
+    function toggleFaq(button: HTMLElement) {
       var content = button.nextElementSibling;
-      var icon = button.querySelector('.faq-icon');
+      var icon = button.querySelector<HTMLElement>('.faq-icon');
       var isExpanded = button.getAttribute('aria-expanded') === 'true';
 
       if (isExpanded) {
         content?.classList.add('hidden');
         button.setAttribute('aria-expanded', 'false');
-        icon.style.transform = 'rotate(0deg)';
+        if (icon) icon.style.transform = 'rotate(0deg)';
       } else {
         content?.classList.remove('hidden');
         button.setAttribute('aria-expanded', 'true');
-        icon.style.transform = 'rotate(180deg)';
+        if (icon) icon.style.transform = 'rotate(180deg)';
       }
     }
 
@@ -417,15 +430,17 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     //    while the user scrolls (it never slides away mid-page).
     var header = document.querySelector('header');
     if (header) {
+      // Narrowed once: the closure below must not see `header` as nullable.
+      var headerEl = header;
       var threshold = 4;
-      var lastVisible = null;
+      var lastVisible: boolean | null = null;
       var updateHeader = function() {
         var visible = window.scrollY > threshold;
         if (visible === lastVisible) return;
         lastVisible = visible;
-        header.classList.toggle('hidden', !visible);
+        headerEl.classList.toggle('hidden', !visible);
         // Drop any leftover offset from the old auto-hide behaviour.
-        header.classList.remove('-translate-y-full');
+        headerEl.classList.remove('-translate-y-full');
       };
       updateHeader();
       window.addEventListener('scroll', updateHeader, { passive: true });
@@ -434,19 +449,21 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     // 7. Jadwal timeline line: tepat dari nomor 1 ke nomor 4
     // Garis statis (tidak ikut animasi step) supaya tetap menyatu saat step fade/geser.
     function layoutJadwalLine() {
-      var timeline = document.querySelector('#jadwal .jadwal-timeline');
-      var line = timeline ? timeline.querySelector('.jadwal-timeline-line') : null;
-      var steps = timeline ? timeline.querySelectorAll('.jadwal-step') : [];
+      var timeline = document.querySelector<HTMLElement>('#jadwal .jadwal-timeline');
+      var line = timeline ? timeline.querySelector<HTMLElement>('.jadwal-timeline-line') : null;
+      var steps = timeline
+        ? Array.from(timeline.querySelectorAll<HTMLElement>('.jadwal-step'))
+        : [];
       if (!timeline || !line || steps.length === 0) return;
 
-      var numberCenterY = function(step) {
-        var number = step.querySelector('.jadwal-step-number');
+      var numberCenterY = function(step: HTMLElement) {
+        var number = step.querySelector<HTMLElement>('.jadwal-step-number');
         if (!number) return 0;
         var y = 0;
-        var node = number;
+        var node: HTMLElement | null = number;
         while (node && node !== timeline) {
           y += node.offsetTop;
-          node = node.offsetParent;
+          node = node.offsetParent as HTMLElement | null;
         }
         return y + number.offsetHeight / 2;
       };
@@ -467,6 +484,12 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     // 8. Expose functions to global scope for inline onclick handlers.
     //    Harmless if a user taps before the module runs: the handlers only
     //    fire on real clicks, which happen after the deferred script executes.
+    declare global {
+      interface Window {
+        switchBiayaTab: (tabName: string) => void;
+        toggleFaq: (button: HTMLElement) => void;
+      }
+    }
     window.switchBiayaTab = switchBiayaTab;
     window.toggleFaq = toggleFaq;
 
@@ -477,8 +500,8 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     function initBiayaCounters() {
       if (!('IntersectionObserver' in window)) return; // static figures stay
 
-      var panels = document.querySelectorAll('.biaya-content');
-      Array.prototype.forEach.call(panels, function(panel) {
+      var panels = document.querySelectorAll<HTMLElement>('.biaya-content');
+      Array.prototype.forEach.call(panels, function(panel: HTMLElement) {
         var tabName = panel.id.replace('content-', '');
         var observer = new IntersectionObserver(
           function(entries) {
