@@ -1,58 +1,3 @@
-export interface SiteConfig {
-  nama: string;
-  tagline: string;
-  alamat: string;
-  kontak: {
-    whatsapp: {
-      nomor: string;
-      nama: string;
-      pesanAwal: string;
-    };
-    whatsappAdmin: {
-      nomor: string;
-      nama: string;
-      pesanAwal: string;
-    };
-    website: string;
-    email: string;
-    mediaSosial: {
-      instagram: string;
-      facebook: string;
-      youtube: string;
-      tiktok: string;
-    };
-    maps?: string;
-  };
-  biaya: {
-    umum: {
-      label: string;
-      items: { nama: string; nominal: number }[];
-      keterangan: string[];
-    };
-    dhuafa: {
-      label: string;
-      items: { nama: string; nominal: number }[];
-      keterangan: string[];
-    };
-    yatim: {
-      label: string;
-      items: { nama: string; nominal: number }[];
-      keterangan: string[];
-    };
-  };
-  tahunAjaran: string;
-  logo: string;
-  gerbang: string;
-  gedung: string;
-  get biayaUmumTotal(): number;
-  get biayaDhuafaTotal(): number;
-  get biayaYatimTotal(): number;
-  get statusPendaftaran(): "Akan Datang" | "Sedang Dibuka" | "Selesai";
-  get whatsappLink(): string;
-  get whatsappAdminLink(): string;
-  get googleMapsLink(): string;
-}
-
 const siteData = {
   nama: "Pondok Pesantren Al-Lathifah 2",
   tagline: "Lebih Baik Pesantren, Pesantren Lebih Baik",
@@ -77,12 +22,6 @@ const siteData = {
       tiktok: "https://www.tiktok.com/@lathifah2_mediasetu",
     },
     maps: "https://maps.app.goo.gl/dSofJqu2LvcqBHYn7",
-  },
-  mediaSosial: {
-    instagram: "https://www.instagram.com/ponpes_allathifah/",
-    facebook: "https://www.facebook.com/pp.allathifah",
-    youtube: "https://www.youtube.com/@yayasan_allathifah",
-    tiktok: "https://www.tiktok.com/@lathifah2_mediasetu",
   },
   biaya: {
     umum: {
@@ -130,9 +69,6 @@ const siteData = {
     },
   },
   tahunAjaran: "2027-2028",
-  logo: "Logo.png",
-  gerbang: "gerbang.jpg",
-  gedung: "gedung.jpg",
 };
 
 function encodeWhatsAppMessage(message: string): string {

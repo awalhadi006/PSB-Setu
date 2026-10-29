@@ -1,14 +1,15 @@
 ---
 import { site } from '@/data/site';
+import Icon from './Icon.astro';
 ---
 
 <section id="profil" class="section bg-[#fbf7ee] text-on-surface" aria-labelledby="profil-title">
   <!-- Header with 8-pointed star ornament -->
   <div class="section-header">
     <div class="flex items-center gap-2 text-secondary">
-      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">emergency</span>
+      <Icon class="text-[18px]" name="emergency" />
       <span class="font-label-sm text-label-sm uppercase tracking-widest font-bold">Lembaga Pesantren Salaf Modern</span>
-      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">emergency</span>
+      <Icon class="text-[18px]" name="emergency" />
     </div>
     <h2 id="profil-title" class="section-title-md3">Profil & Sistem Pendidikan</h2>
     <div class="section-divider" aria-hidden="true"></div>
@@ -17,7 +18,7 @@ import { site } from '@/data/site';
   <!-- Blockquote Motto -->
   <div class="blockquote">
     <div class="blockquote-quote" aria-hidden="true">
-      <span class="blockquote-quote-icon">format_quote</span>
+      <Icon class="blockquote-quote-icon" name="format_quote" />
     </div>
     <span class="blockquote-label">Motto Utama Santri</span>
     <p class="blockquote-text">"Sholeh, Mandiri, Berjiwa Besar"</p>
@@ -26,7 +27,7 @@ import { site } from '@/data/site';
   <!-- Kartu Sistem Pendidikan Resmi -->
   <div class="card-elevated-lg px-space-lg py-space-md">
     <div class="flex items-center gap-2 text-primary font-title-md text-title-md">
-      <span class="material-symbols-outlined text-secondary" aria-hidden="true">menu_book</span>
+      <Icon class="text-secondary" name="menu_book" />
       <h3>Sistem Pendidikan Terpadu</h3>
     </div>
     <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed text-justify">
@@ -37,7 +38,7 @@ import { site } from '@/data/site';
   <!-- Kartu Visi -->
   <div class="visi-card">
     <div class="visi-header">
-      <span class="visi-icon" aria-hidden="true">lightbulb</span>
+      <Icon class="visi-icon" name="lightbulb" aria-hidden="true" />
       <span class="visi-label">Visi Pondok Pesantren</span>
     </div>
     <p class="visi-text">"Membentuk generasi Qur'ani yang berpengetahuan luas, berjiwa besar dan berakhlakul karimah."</p>
@@ -46,7 +47,7 @@ import { site } from '@/data/site';
   <!-- Daftar Misi -->
   <div class="misi-card">
     <div class="misi-header">
-      <span class="misi-icon" aria-hidden="true">track_changes</span>
+      <Icon class="misi-icon" name="track_changes" aria-hidden="true" />
       <h3 class="misi-title">Misi Pesantren</h3>
     </div>
     <div class="misi-list">

@@ -16,9 +16,6 @@
   body {
     overscroll-behavior-y: none;
   }
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
   .pt-safe {
     padding-top: env(safe-area-inset-top, 0px);
   }
@@ -38,19 +35,10 @@
 }
 
 @layer utilities {
-  .material-symbols {
-    font-family: 'Material Symbols Outlined';
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
+  /* Inline SVG icon (see components/Icon.astro). Sizes via text-[Npx] utility. */
+  .icon {
     display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
+    vertical-align: -0.125em;
   }
 
   /* MD3 Color Utilities - Background */
@@ -60,142 +48,43 @@
   .bg-surface-container-low { background-color: #eaf7ed; }
   .bg-surface-container { background-color: #e4f1e7; }
   .bg-surface-container-high { background-color: #dfebe2; }
-  .bg-surface-container-highest { background-color: #d9e6dc; }
   .bg-primary { background-color: #00261b; }
   .bg-secondary { background-color: #755b00; }
-  .bg-tertiary { background-color: #002619; }
-  .bg-tertiary-container { background-color: #003e2a; }
-  .bg-error { background-color: #ba1a1a; }
-  .bg-error-container { background-color: #ffdad6; }
   .bg-surface { background-color: #f0fdf3; }
-  .bg-surface-bright { background-color: #f0fdf3; }
-  .bg-surface-dim { background-color: #d0ddd4; }
-  .bg-surface-tint { background-color: #396756; }
-  .bg-primary-fixed { background-color: #bcedd7; }
-  .bg-primary-fixed-dim { background-color: #a0d1bc; }
-  .bg-secondary-fixed { background-color: #ffe08e; }
-  .bg-secondary-fixed-dim { background-color: #ecc246; }
-  .bg-tertiary-fixed { background-color: #adf1d0; }
-  .bg-tertiary-fixed-dim { background-color: #92d4b4; }
-  .bg-on-primary { background-color: #ffffff; }
-  .bg-on-secondary { background-color: #ffffff; }
-  .bg-on-tertiary { background-color: #ffffff; }
-  .bg-on-error { background-color: #ffffff; }
   .bg-on-surface { background-color: #131e18; }
   .bg-on-surface-variant { background-color: #414944; }
-  .bg-on-primary-container { background-color: #79a894; }
-  .bg-on-secondary-container { background-color: #735a00; }
-  .bg-on-tertiary-container { background-color: #6aab8d; }
-  .bg-on-error-container { background-color: #93000a; }
-  .bg-on-primary-fixed { background-color: #002116; }
-  .bg-on-primary-fixed-variant { background-color: #214f3f; }
-  .bg-on-secondary-fixed { background-color: #241a00; }
-  .bg-on-secondary-fixed-variant { background-color: #584400; }
-  .bg-on-tertiary-fixed { background-color: #002115; }
-  .bg-on-tertiary-fixed-variant { background-color: #055139; }
-  .bg-outline { background-color: #717974; }
-  .bg-outline-variant { background-color: #c0c8c3; }
-  .bg-inverse-surface { background-color: #28332d; }
-  .bg-inverse-primary { background-color: #a0d1bc; }
-  .bg-inverse-on-surface { background-color: #e7f4ea; }
-  .bg-background { background-color: #f0fdf3; }
-  .bg-on-background { background-color: #131e18; }
   .bg-wa-green { background-color: #25d366; }
 
   /* MD3 Color Utilities - Text */
   .text-secondary-container { color: #fed255; }
-  .text-primary-container { color: #0b3d2e; }
-  .text-surface-container-lowest { color: #ffffff; }
-  .text-surface-container-low { color: #eaf7ed; }
-  .text-surface-container { color: #e4f1e7; }
-  .text-surface-container-high { color: #dfebe2; }
-  .text-surface-container-highest { color: #d9e6dc; }
   .text-primary { color: #00261b; }
   .text-secondary { color: #755b00; }
-  .text-tertiary { color: #002619; }
-  .text-tertiary-container { color: #003e2a; }
   .text-error { color: #ba1a1a; }
-  .text-error-container { color: #ffdad6; }
-  .text-surface { color: #f0fdf3; }
-  .text-surface-bright { color: #f0fdf3; }
-  .text-surface-dim { color: #d0ddd4; }
-  .text-surface-tint { color: #396756; }
   .text-primary-fixed { color: #bcedd7; }
-  .text-primary-fixed-dim { color: #a0d1bc; }
   .text-secondary-fixed { color: #ffe08e; }
-  .text-secondary-fixed-dim { color: #ecc246; }
-  .text-tertiary-fixed { color: #adf1d0; }
-  .text-tertiary-fixed-dim { color: #92d4b4; }
   .text-on-primary { color: #ffffff; }
   .text-on-secondary { color: #ffffff; }
-  .text-on-tertiary { color: #ffffff; }
-  .text-on-error { color: #ffffff; }
   .text-on-surface { color: #131e18; }
   .text-on-surface-variant { color: #414944; }
-  .text-on-primary-container { color: #79a894; }
   .text-on-secondary-container { color: #735a00; }
-  .text-on-tertiary-container { color: #6aab8d; }
-  .text-on-error-container { color: #93000a; }
-  .text-on-primary-fixed { color: #002116; }
-  .text-on-primary-fixed-variant { color: #214f3f; }
-  .text-on-secondary-fixed { color: #241a00; }
-  .text-on-secondary-fixed-variant { color: #584400; }
-  .text-on-tertiary-fixed { color: #002115; }
-  .text-on-tertiary-fixed-variant { color: #055139; }
-  .text-outline { color: #717974; }
-  .text-outline-variant { color: #c0c8c3; }
-  .text-inverse-surface { color: #28332d; }
-  .text-inverse-primary { color: #a0d1bc; }
-  .text-inverse-on-surface { color: #e7f4ea; }
-  .text-background { color: #f0fdf3; }
-  .text-on-background { color: #131e18; }
   .text-wa-green { color: #25d366; }
 
   /* Border colors */
-  .border-secondary-container { border-color: #fed255; }
-  .border-primary-container { border-color: #0b3d2e; }
-  .border-surface-container-lowest { border-color: #ffffff; }
-  .border-surface-container-low { border-color: #eaf7ed; }
-  .border-surface-container { border-color: #e4f1e7; }
-  .border-surface-container-high { border-color: #dfebe2; }
-  .border-surface-container-highest { border-color: #d9e6dc; }
-  .border-primary { border-color: #00261b; }
-  .border-secondary { border-color: #755b00; }
-  .border-tertiary { border-color: #002619; }
-  .border-tertiary-container { border-color: #003e2a; }
-  .border-error { border-color: #ba1a1a; }
-  .border-error-container { border-color: #ffdad6; }
-  .border-surface { border-color: #f0fdf3; }
-  .border-outline { border-color: #717974; }
-  .border-outline-variant { border-color: #c0c8c3; }
-
   /* MD3 Font Family Utilities */
-  .font-display-lg { font-family: 'Noto Serif', serif; }
-  .font-headline-lg { font-family: 'Noto Serif', serif; }
-  .font-headline-md { font-family: 'Noto Serif', serif; }
   .font-headline-sm { font-family: 'Noto Serif', serif; }
-  .font-headline-lg-mobile { font-family: 'Noto Serif', serif; }
   .font-title-lg { font-family: 'Plus Jakarta Sans', sans-serif; }
   .font-title-md { font-family: 'Plus Jakarta Sans', sans-serif; }
-  .font-body-lg { font-family: 'Plus Jakarta Sans', sans-serif; }
   .font-body-md { font-family: 'Plus Jakarta Sans', sans-serif; }
   .font-body-sm { font-family: 'Plus Jakarta Sans', sans-serif; }
-  .font-label-lg { font-family: 'Plus Jakarta Sans', sans-serif; }
   .font-label-md { font-family: 'Plus Jakarta Sans', sans-serif; }
   .font-label-sm { font-family: 'Plus Jakarta Sans', sans-serif; }
 
   /* MD3 Font Size + Line Height + Weight Utilities */
-  .text-display-lg { font-size: 52px; line-height: 64px; letter-spacing: -0.02em; font-weight: 700; }
-  .text-headline-lg { font-size: 36px; line-height: 44px; letter-spacing: -0.015em; font-weight: 600; }
-  .text-headline-md { font-size: 26px; line-height: 34px; letter-spacing: -0.01em; font-weight: 600; }
   .text-headline-sm { font-size: 20px; line-height: 28px; font-weight: 600; }
-  .text-headline-lg-mobile { font-size: 28px; line-height: 36px; letter-spacing: -0.01em; font-weight: 600; }
   .text-title-lg { font-size: 18px; line-height: 26px; font-weight: 600; }
   .text-title-md { font-size: 16px; line-height: 24px; font-weight: 600; }
-  .text-body-lg { font-size: 18px; line-height: 28px; font-weight: 400; }
   .text-body-md { font-size: 15px; line-height: 24px; font-weight: 400; }
   .text-body-sm { font-size: 13px; line-height: 20px; font-weight: 400; }
-  .text-label-lg { font-size: 14px; line-height: 20px; letter-spacing: 0.01em; font-weight: 600; }
   .text-label-md { font-size: 12px; line-height: 16px; letter-spacing: 0.03em; font-weight: 600; }
   .text-label-sm { font-size: 11px; line-height: 14px; letter-spacing: 0.05em; font-weight: 700; }
 
@@ -220,11 +109,6 @@
 
 @layer components {
   /* Button variants */
-  .btn-primary-stacked {
-    @apply h-12 w-full rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform hover:brightness-105;
-    min-height: 44px;
-  }
-
   .btn-secondary-stacked {
     @apply h-12 w-full rounded-full bg-surface-container-lowest/15 backdrop-blur-md text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 active:scale-95 transition-colors hover:bg-surface-container-lowest/25;
     min-height: 44px;
@@ -232,22 +116,6 @@
 
   .btn-wa-fab {
     @apply w-14 h-14 rounded-full bg-wa-green text-white flex items-center justify-center shadow-[0_12px_24px_-4px_rgba(37,211,102,0.4)] active:scale-95 transition-transform hover:brightness-105;
-  }
-
-  .btn-wa-header {
-    @apply w-9 h-9 rounded-full bg-wa-green text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform shrink-0;
-  }
-
-  .btn-nav-trigger {
-    @apply w-11 h-11 rounded-full bg-surface-container text-primary hover:bg-surface-container-high transition-colors focus:outline-none shrink-0 flex items-center justify-center;
-  }
-
-  .btn-nav-close {
-    @apply w-11 h-11 rounded-full bg-primary-container text-on-primary-fixed flex items-center justify-center focus:outline-none;
-  }
-
-  .btn-social-dark {
-    @apply flex items-center justify-between p-3 rounded-xl bg-primary-container/60 hover:bg-primary-container text-white transition-colors;
   }
 
   .btn-map-link {
@@ -311,22 +179,6 @@
   /* Stat metric card */
   .stat-metric {
     @apply flex items-center gap-space-md bg-surface-container-lowest p-4 rounded-xl shadow-sm;
-  }
-
-  .stat-icon {
-    @apply w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0;
-  }
-
-  .stat-content {
-    @apply flex flex-col min-w-0;
-  }
-
-  .stat-value {
-    @apply font-headline-sm text-headline-sm text-primary;
-  }
-
-  .stat-desc {
-    @apply font-body-sm text-body-sm text-on-surface-variant;
   }
 
   /* Syarat checklist item */
@@ -441,7 +293,7 @@
   }
 
   .biaya-ketentuan-icon {
-    @apply material-symbols text-[16px] text-secondary mt-0.5 shrink-0;
+    @apply icon text-[16px] text-secondary mt-0.5 shrink-0;
   }
 
   /* Jadwal stepper */
@@ -462,10 +314,6 @@
 
   .jadwal-step-number {
     @apply w-7 h-7 rounded-full bg-primary-container text-primary-fixed flex items-center justify-center font-label-sm text-label-sm font-bold shrink-0 z-10 shadow-sm;
-  }
-
-  .jadwal-step-number-accent {
-    @apply bg-secondary-container text-on-secondary-container;
   }
 
   .jadwal-step-content {
@@ -493,7 +341,7 @@
   }
 
   .jadwal-location-icon {
-    @apply material-symbols text-[24px] text-primary;
+    @apply icon text-[24px] text-primary;
   }
 
   .jadwal-location-label {
@@ -526,56 +374,8 @@
     @apply relative flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm border border-secondary-container/40;
   }
 
-  .galeri-image-wrap {
-    @apply relative h-36 w-full rounded-t-2xl overflow-hidden bg-primary-container flex items-center justify-center;
-  }
-
-  .galeri-gradient {
-    @apply absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent z-10;
-  }
-
-  .galeri-image {
-    @apply absolute inset-0 bg-cover bg-center opacity-75;
-  }
-
-  .galeri-icon {
-    @apply relative z-20 text-center p-2;
-  }
-
-  .galeri-icon-svg {
-    @apply material-symbols text-secondary-fixed text-[32px];
-  }
-
-  .galeri-tag {
-    @apply absolute top-2 left-2 z-20 px-2 py-0.5 rounded-full bg-primary/80 backdrop-blur-sm text-secondary-fixed font-label-sm text-[10px] font-bold;
-  }
-
-  .galeri-content {
-    @apply p-2.5 flex flex-col;
-  }
-
   .galeri-title {
     @apply font-title-md text-[14px] leading-snug text-primary font-semibold;
-  }
-
-  .galeri-desc {
-    @apply font-body-sm text-[11px] text-on-surface-variant mt-0.5 leading-tight;
-  }
-
-  .galeri-footer {
-    @apply bg-surface-container p-3.5 rounded-xl flex items-center justify-between;
-  }
-
-  .galeri-footer-text {
-    @apply flex items-center gap-2;
-  }
-
-  .galeri-footer-icon {
-    @apply material-symbols text-secondary text-[20px];
-  }
-
-  .galeri-footer-label {
-    @apply font-body-sm text-body-sm text-primary font-medium;
   }
 
   /* Kontak narahubung */
@@ -638,7 +438,7 @@
   }
 
   .faq-icon {
-    @apply material-symbols text-primary text-[20px] shrink-0 transition-transform duration-200;
+    @apply icon text-primary text-[20px] shrink-0 transition-transform duration-200;
   }
 
   .faq-answer {
@@ -646,51 +446,11 @@
   }
 
   /* Nav modal */
-  .nav-modal {
-    @apply hidden fixed inset-0 z-[60] bg-primary text-on-primary flex-col p-space-lg overflow-y-auto pt-safe pb-safe backdrop-blur-2xl;
-  }
-
   .nav-modal.open {
     @apply flex;
   }
 
-  .nav-modal-header {
-    @apply flex items-center justify-between pb-space-md;
-  }
-
-  .nav-modal-logo {
-    @apply flex items-center gap-space-sm;
-  }
-
-  .nav-modal-logo-icon {
-    @apply w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-primary-fixed;
-  }
-
-  .nav-modal-title {
-    @apply font-headline-sm text-headline-sm text-primary-fixed;
-  }
-
-  .nav-modal-link {
-    @apply flex items-center justify-between py-3 px-space-sm rounded-xl hover:bg-primary-container text-on-primary font-title-lg text-title-lg transition-colors;
-  }
-
-  .nav-modal-link-icon {
-    @apply material-symbols text-secondary-fixed;
-  }
-
-  .nav-modal-chevron {
-    @apply material-symbols text-[18px] opacity-40;
-  }
-
-  .nav-modal-cta {
-    @apply h-12 w-full rounded-full bg-secondary text-on-secondary font-label-lg text-label-lg font-bold flex items-center justify-center gap-space-sm shadow-md;
-  }
-
   /* Status chip */
-  .status-chip {
-    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-secondary-container/20 backdrop-blur-md text-secondary-fixed;
-  }
-
   .status-dot {
     @apply w-2 h-2 rounded-full bg-secondary-fixed animate-pulse;
   }
@@ -705,7 +465,7 @@
   }
 
   .psb-badge-icon {
-    @apply material-symbols text-[16px] text-secondary-fixed;
+    @apply icon text-[16px] text-secondary-fixed;
   }
 
   .psb-badge-text {
@@ -760,7 +520,7 @@
   }
 
   .blockquote-quote-icon {
-    @apply material-symbols text-[72px];
+    @apply icon text-[72px];
   }
 
   .blockquote-label {
@@ -781,7 +541,7 @@
   }
 
   .visi-icon {
-    @apply material-symbols text-[22px];
+    @apply icon text-[22px];
   }
 
   .visi-label {
@@ -802,7 +562,7 @@
   }
 
   .misi-icon {
-    @apply material-symbols text-secondary;
+    @apply icon text-secondary;
   }
 
   .misi-title {
@@ -839,7 +599,7 @@
   }
 
   .banner-quote-icon {
-    @apply material-symbols text-[28px] text-secondary-fixed;
+    @apply icon text-[28px] text-secondary-fixed;
   }
 
   .banner-quote-text {
@@ -866,10 +626,6 @@
   }
 
   /* Hero subtext */
-  .hero-subtext {
-    @apply font-body-md text-body-md text-primary-fixed-dim max-w-sm mb-space-lg leading-relaxed;
-  }
-
   /* Buttons container */
   .hero-buttons {
     @apply w-full max-w-xs flex flex-col gap-space-sm;
@@ -896,10 +652,6 @@
     @apply font-headline-sm text-headline-sm text-primary-fixed;
   }
 
-  .footer-brand-slogan {
-    @apply font-body-md text-body-md text-primary-fixed-dim italic font-headline-md;
-  }
-
   .footer-info {
     @apply flex flex-col gap-space-xs text-on-primary-container font-body-sm text-body-sm;
   }
@@ -909,7 +661,7 @@
   }
 
   .footer-info-icon {
-    @apply material-symbols text-[18px] text-secondary-fixed;
+    @apply icon text-[18px] text-secondary-fixed;
   }
 
   .footer-copyright {
@@ -963,21 +715,6 @@
   }
 
   /* Slogan closing */
-  .slogan-closing {
-    @apply text-center pt-2 flex flex-col items-center gap-1;
-  }
-
-  .slogan-closing-icon {
-    @apply material-symbols text-[28px] text-secondary-fixed;
-  }
-
-  .slogan-closing-text {
-    @apply font-headline-sm text-headline-sm text-secondary-fixed italic font-headline-md;
-  }
-
-  .slogan-closing-location {
-    @apply font-label-sm text-label-sm text-primary-fixed-dim;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

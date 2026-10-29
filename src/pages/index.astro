@@ -14,6 +14,7 @@ import CaraMendaftar from '../components/CaraMendaftar.astro';
 import FAQ from '../components/FAQ.astro';
 import Kontak from '../components/Kontak.astro';
 import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
 
 const title = 'Penerimaan Santri Baru';
@@ -84,7 +85,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
         <div class="p-4 bg-primary-container text-on-primary flex items-center justify-between">
           <h3 id="wa-overlay-title" class="font-title-lg text-title-lg font-semibold">Hubungi Panitia PSB</h3>
           <button id="wa-overlay-close" class="w-8 h-8 rounded-full bg-surface-container text-on-surface flex items-center justify-center" aria-label="Tutup">
-            <span class="material-symbols-outlined text-[20px]">close</span>
+            <Icon class="text-[20px]" name="close" />
           </button>
         </div>
         <div class="p-3 space-y-2">
@@ -103,7 +104,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
               <p class="font-title-md text-title-md text-on-surface font-semibold truncate">Ust. Abdul Khair Nursa Ilma, S.Pd</p>
               <p class="font-body-sm text-body-sm text-on-surface-variant truncate">0896-7931-3820 — Panitia PSB</p>
             </div>
-            <span class="material-symbols-outlined text-on-surface-variant text-[20px]">chevron_right</span>
+            <Icon class="text-on-surface-variant text-[20px]" name="chevron_right" />
           </a>
           <a
             href={site.whatsappAdminLink}
@@ -120,7 +121,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
               <p class="font-title-md text-title-md text-on-surface font-semibold truncate">Ust. Aldi Wahid Alfaini, S.Li, Gr</p>
               <p class="font-body-sm text-body-sm text-on-surface-variant truncate">0817-0307-2269 — Panitia PSB</p>
             </div>
-            <span class="material-symbols-outlined text-on-surface-variant text-[20px]">chevron_right</span>
+            <Icon class="text-on-surface-variant text-[20px]" name="chevron_right" />
           </a>
 </div>
       </div>
@@ -129,134 +130,21 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
 
   <Footer />
 
-  <!-- Main JS entry point (inlined for Astro 5 static build) -->
-  <script is:inline>
-    // 1. Progressive enhancement: mark HTML as JS-ready immediately on DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', function() {
-      document.documentElement.classList.add('js-ready');
-    });
-
-    // 2. Dynamic imports after DOM ready — keeps initial bundle small
+  <!-- Page interactions + animations.
+       Bundled by Vite from node_modules (no CDN, no import map). GSAP is split
+       into its own chunk and fetched only after the page has loaded, so it never
+       competes with the hero photo - the LCP element - for bandwidth. -->
+  <script>
+    // 1. ANIMATION SETUP
     async function initAnimations() {
-      // Import GSAP core + plugins (no SplitText - premium plugin)
-      var imports = await Promise.all([
+      // Respect the OS "reduce motion" setting: skip every tween entirely.
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger'),
-        import('gsap/TextPlugin')
       ]);
-      var gsap = imports[0].gsap;
-      var ScrollTrigger = imports[1].ScrollTrigger;
-      var TextPlugin = imports[2].TextPlugin;
-
-      // Register plugins
-      gsap.registerPlugin(ScrollTrigger, TextPlugin);
-
-      // ==========================================
-      // GSAP ANIMATIONS (inlined)
-      // ==========================================
-      // Check prefers-reduced-motion
-      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) {
-        document.documentElement.classList.add('reduce-motion');
-        return;
-      }
-
-      // ==========================================
-      // HERO ANIMATIONS (CSS-based, no SplitText)
-      // ==========================================
-      var heroTitle = document.querySelector('#beranda h1#hero-title');
-      var heroButton = document.querySelector('#beranda .btn-secondary-stacked');
-
-      if (heroTitle) {
-        // Simple fade-in animation without SplitText
-        gsap.matchMedia().add(
-          {
-            mobile: '(max-width: 767px)',
-            desktop: '(min-width: 768px)',
-          },
-          function(context) {
-            // Fade in the whole title
-            gsap.from(heroTitle, {
-              y: 50,
-              opacity: 0,
-              duration: 1,
-              ease: 'power3.out',
-            });
-
-            // Staggered button reveal
-            if (heroButton) {
-              gsap.from(heroButton, {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-                delay: context.conditions.mobile ? 0.6 : 0.4,
-              });
-            }
-          }
-        );
-      }
-
-      // ==========================================
-      // SCROLL-REVEAL FOR SECTIONS
-      // ==========================================
-      var sections = document.querySelectorAll('section.section:not(#beranda)');
-      
-      gsap.matchMedia().add(
-        {
-          mobile: '(max-width: 767px)',
-          desktop: '(min-width: 768px)',
-        },
-        function(context) {
-          sections.forEach(function(section) {
-            var content = section.querySelector('.container > *:not(h2)') || section.querySelector('.container');
-            if (!content) return;
-
-            if (context.conditions.mobile) {
-              gsap.from(content, {
-                scrollTrigger: {
-                  trigger: section,
-                  start: 'top 85%',
-                  once: true,
-                },
-                y: 40,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-              });
-            } else {
-              gsap.from(content, {
-                scrollTrigger: {
-                  trigger: section,
-                  start: 'top 80%',
-                  toggleActions: 'play none none reverse',
-                },
-                y: 40,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-              });
-            }
-          });
-        }
-      );
-
-      // ==========================================
-      // TIMELINE DRAWING (stroke-dashoffset)
-      // ==========================================
-      var timelinePaths = document.querySelectorAll('#cara-mendaftar .timeline-path');
-      timelinePaths.forEach(function(path) {
-        gsap.to(path, {
-          scrollTrigger: {
-            trigger: path.closest('section.section'),
-            start: 'top 70%',
-            toggleActions: 'play none none reverse',
-          },
-          strokeDashoffset: 0,
-          duration: 1.5,
-          ease: 'power2.out',
-        });
-      });
+      gsap.registerPlugin(ScrollTrigger);
 
       // ==========================================
       // JADWAL STEPS TIMELINE ANIMATION (scroll-triggered)
@@ -284,22 +172,9 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       });
 
       // ==========================================
-      // SECTION TITLE ORNAMENT (::before scaleX via .animate-in class)
-      // ==========================================
-      var sectionTitles = document.querySelectorAll('section.section h2.section-title');
-      sectionTitles.forEach(function(title) {
-        ScrollTrigger.create({
-          trigger: title,
-          start: 'top 85%',
-          once: true,
-          onEnter: function() { title.classList.add('animate-in'); },
-        });
-      });
-
-      // ==========================================
       // CARD HOVER/TAP LIFT
       // ==========================================
-      var cards = document.querySelectorAll('.card-elevated, .card-elevated-lg, .card-primary, .card-surface-low, .card-surface-lowest, .card-surface-container, .syarat-item, .almamater-item, .narahubung-card, .biaya-content, .visicard, .misi-card, .stat-metric, .galeri-card');
+      var cards = document.querySelectorAll('.card-elevated, .card-elevated-lg, .card-surface-low, .syarat-item, .almamater-item, .narahubung-card, .biaya-content, .misi-card, .galeri-card');
       cards.forEach(function(card) {
         var hoverTween = null;
         
@@ -333,21 +208,6 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       });
 
       // ==========================================
-      // NAVBAR SCROLL EFFECT (header)
-      // ==========================================
-      var navbar = document.querySelector('header');
-      if (navbar) {
-        ScrollTrigger.create({
-          trigger: 'body',
-          start: 'top -50',
-          end: 'bottom bottom',
-          onToggle: function(self) {
-            navbar.classList.toggle('scrolled', self.isActive);
-          },
-        });
-      }
-
-      // ==========================================
       // WA FAB PULSE
       // ==========================================
       var waFab = document.querySelector('.btn-wa-fab');
@@ -362,13 +222,11 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       }
 
       // ==========================================
-      // SCROLLTRIGGER REFRESH ON LOAD
+      // RECALCULATE TRIGGERS
       // ==========================================
-      window.addEventListener('load', function() {
-        ScrollTrigger.refresh();
-      });
-
-      // Also refresh on font load
+      // We only run after `load`, so measurements are already final. Web fonts
+      // can still shift layout, so refresh once more when they settle.
+      ScrollTrigger.refresh();
       if (document.fonts) {
         document.fonts.ready.then(function() {
           ScrollTrigger.refresh();
@@ -432,7 +290,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     // 5. Accordion toggle for FAQ
     function toggleFaq(button) {
       var content = button.nextElementSibling;
-      var icon = button.querySelector('.material-symbols');
+      var icon = button.querySelector('.faq-icon');
       var isExpanded = button.getAttribute('aria-expanded') === 'true';
 
       if (isExpanded) {
@@ -456,10 +314,8 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
 
         if (currentScrollY <= threshold) {
           header.classList.add('hidden');
-          header.classList.remove('scrolled');
         } else {
           header.classList.remove('hidden');
-          header.classList.add('scrolled');
 
           if (currentScrollY > lastScrollY && currentScrollY > 100) {
             header.classList.add('-translate-y-full');
@@ -504,24 +360,33 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       document.fonts.ready.then(layoutJadwalLine);
     }
 
-    // 8. Kick off initialization
-    async function main() {
-      await initAnimations();
-
-      // 9. Refresh ScrollTrigger after all images/fonts have loaded
-      window.addEventListener('load', async function() {
-        var ScrollTrigger = (await import('gsap/ScrollTrigger')).ScrollTrigger;
-        ScrollTrigger.refresh();
-      });
-    }
-
-    // Expose functions to global scope for inline onclick handlers
+    // 8. Expose functions to global scope for inline onclick handlers.
+    //    Harmless if a user taps before the module runs: the handlers only
+    //    fire on real clicks, which happen after the deferred script executes.
     window.switchBiayaTab = switchBiayaTab;
     window.toggleFaq = toggleFaq;
 
-    main().catch(function(err) {
-      console.error('[main.ts] Initialization failed:', err);
-    });
+    // 9. Kick off animation setup once the page is loaded and the main thread is
+    //    free. GSAP is a ~40 KB chunk; requesting it earlier would slow down the
+    //    hero photo, which is the element being measured for LCP.
+    function startWhenIdle() {
+      var run = function() {
+        initAnimations().catch(function(err) {
+          console.error('[animations] setup failed:', err);
+        });
+      };
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(run, { timeout: 2000 });
+      } else {
+        setTimeout(run, 200);
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      startWhenIdle();
+    } else {
+      window.addEventListener('load', startWhenIdle, { once: true });
+    }
   </script>
 </BaseLayout>
 

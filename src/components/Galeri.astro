@@ -1,6 +1,7 @@
 ---
-import kegiatan1 from '@/assets/kegiatan 1.jpg';
-import kegiatan2 from '@/assets/kegiatan 2.jpg';
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import kegiatan1 from '@/assets/kegiatan 1.jpg';import kegiatan2 from '@/assets/kegiatan 2.jpg';
 import kegiatan3 from '@/assets/kegiatan 3.jpg';
 import kegiatan4 from '@/assets/kegiatan 4.jpg';
 import kegiatan5 from '@/assets/kegiatan 5.jpg';
@@ -21,97 +22,97 @@ import pelepasanKelas9 from '@/assets/Pelepasan Kelas 9.jpeg';
 
 const galeriImages = [
   {
-    src: kegiatan1.src,
+    image: kegiatan1,
     alt: 'Santri putra menulis catatan saat pembelajaran di kelas',
     caption: 'Kegiatan Pembelajaran di Kelas',
   },
   {
-    src: kegiatan2.src,
+    image: kegiatan2,
     alt: 'Foto bersama dewan ustadz dan ustadzah Pondok Pesantren Al-Lathifah 2',
     caption: 'Dewan Ustadz & Ustadzah',
   },
   {
-    src: kegiatan3.src,
+    image: kegiatan3,
     alt: 'Santri putri berbaris dalam upacara Hari Santri 2024',
     caption: 'Peringatan Hari Santri',
   },
   {
-    src: kegiatan4.src,
+    image: kegiatan4,
     alt: "Halaqah Qur'an santri putra bersama ustadz di serambi masjid",
     caption: "Halaqah Qur'an",
   },
   {
-    src: kegiatan5.src,
+    image: kegiatan5,
     alt: 'Santri putri menggunakan komputer di laboratorium komputer',
     caption: 'Praktik Komputer di Laboratorium',
   },
   {
-    src: pramuka.src,
+    image: pramuka,
     alt: 'Empat santri putri berpakaian pramuka berfoto bersama',
     caption: 'Kebersamaan Pramuka',
   },
   {
-    src: pbbTingkatII.src,
+    image: pbbTingkatII,
     alt: 'Regu pramuka putri tampil dalam lomba PBB tingkat II',
     caption: 'Lomba PBB Tingkat II',
   },
   {
-    src: lombaMasak.src,
+    image: lombaMasak,
     alt: 'Santri putra menyiapkan bahan masakan dalam lomba masak jambore',
     caption: 'Lomba Masak Jambore',
   },
   {
-    src: juaraUmumJambore.src,
+    image: juaraUmumJambore,
     alt: 'Foto bersama santri dan pembina dengan piala juara umum jambore',
     caption: 'Juara Umum Jambore',
   },
   {
-    src: juaraTingkatII.src,
+    image: juaraTingkatII,
     alt: 'Santri putra berfoto dengan piala dan vandel juara lomba tingkat II',
     caption: 'Juara Lomba Tingkat II',
   },
   {
-    src: juaraUmumTingkatII.src,
+    image: juaraUmumTingkatII,
     alt: 'Foto bersama santri putra dan putri dengan piala juara umum lomba tingkat II',
     caption: 'Juara Umum Lomba Tingkat II',
   },
   {
-    src: oborApiUnggun.src,
+    image: oborApiUnggun,
     alt: 'Santri membawa obor saat upacara api unggun',
     caption: 'Obor Api Unggun',
   },
   {
-    src: penyalaanApiUnggun.src,
+    image: penyalaanApiUnggun,
     alt: 'Santri putra menyalakan api unggun pramuka',
     caption: 'Penyalaan Api Unggun',
   },
   {
-    src: lombaEstafet.src,
+    image: lombaEstafet,
     alt: 'Santri putri mengikuti lomba estafet air memperingati 17 Agustus',
     caption: 'Lomba Estafet Air 17 Agustus',
   },
   {
-    src: lombaKetangkasan.src,
+    image: lombaKetangkasan,
     alt: 'Santri putra mengikuti lomba ketangkasan 17 Agustus',
     caption: 'Lomba Ketangkasan 17 Agustus',
   },
   {
-    src: rihlahFlyingFox.src,
+    image: rihlahFlyingFox,
     alt: 'Santri putri bersiap menaiki flying fox saat rihlah',
     caption: 'Kegiatan Rihlah Santri Putri',
   },
   {
-    src: rihlahPutri.src,
+    image: rihlahPutri,
     alt: 'Santri putri berfoto bersama mengenakan helm saat rihlah',
     caption: 'Kebersamaan Rihlah Santri Putri',
   },
   {
-    src: rihlahPutra.src,
+    image: rihlahPutra,
     alt: 'Foto bersama santri putra di The NICE Funtastic Park saat rihlah',
     caption: 'Rihlah Santri Putra',
   },
   {
-    src: pelepasanKelas9.src,
+    image: pelepasanKelas9,
     alt: 'Santri putri duduk berbaris dalam acara pelepasan kelas 9',
     caption: 'Pelepasan Kelas 9',
   },
@@ -126,7 +127,7 @@ const lastLoopIndex = loopImages.length - 1;
 <section id="galeri-dokumentasi" class="section bg-[#fbf7ee] text-on-surface" aria-labelledby="galeri-title">
   <div class="section-header">
     <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container/30 text-on-secondary-container mb-1 shadow-sm">
-      <span class="material-symbols-outlined text-[16px] text-secondary" aria-hidden="true">photo_camera</span>
+      <Icon class="text-[16px] text-secondary" name="photo_camera" />
       <span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Dokumentasi Asli Kehidupan Kampus 24 Jam</span>
     </div>
     <h2 id="galeri-title" class="section-title-md3">Galeri Dokumentasi & Suasana Santri</h2>
@@ -160,12 +161,17 @@ const lastLoopIndex = loopImages.length - 1;
                 data-caption={img.caption}
                 aria-hidden={isClone ? 'true' : undefined}
               >
-                <img
-                  src={img.src}
+                <Image
+                  src={img.image}
                   alt={isClone ? '' : img.alt}
                   class="absolute inset-0 w-full h-full object-cover"
+                  widths={[480, 800, 1200]}
+                  sizes="(min-width: 1024px) 1024px, 100vw"
+                  format="webp"
+                  quality={72}
                   loading={realIndex < 2 ? 'eager' : 'lazy'}
                   decoding="async"
+                  fetchpriority={realIndex === 0 ? 'high' : undefined}
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" aria-hidden="true"></div>
               </div>
@@ -181,7 +187,7 @@ const lastLoopIndex = loopImages.length - 1;
         aria-label="Foto sebelumnya"
         type="button"
       >
-        <span class="material-symbols-outlined text-[24px]">chevron_left</span>
+        <Icon class="text-[24px]" name="chevron_left" />
       </button>
       <button
         id="galeri-next"
@@ -189,14 +195,14 @@ const lastLoopIndex = loopImages.length - 1;
         aria-label="Foto selanjutnya"
         type="button"
       >
-        <span class="material-symbols-outlined text-[24px]">chevron_right</span>
+        <Icon class="text-[24px]" name="chevron_right" />
       </button>
     </div>
 
     <!-- Caption -->
     <div class="flex justify-center mt-3 px-2">
       <p id="galeri-caption" class="galeri-caption inline-flex items-center gap-1.5 max-w-full px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant font-body-sm text-body-sm shadow-sm">
-        <span class="material-symbols-outlined text-[15px] text-secondary shrink-0" aria-hidden="true">photo_camera</span>
+        <Icon class="text-[15px] text-secondary shrink-0" name="photo_camera" />
         <span id="galeri-caption-text" class="truncate min-w-0">{galeriImages[0].caption}</span>
       </p>
     </div>

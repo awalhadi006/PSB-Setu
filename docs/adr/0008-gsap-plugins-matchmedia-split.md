@@ -1,30 +1,45 @@
-# ADR-0008: GSAP Plugins + matchMedia Desktop/Mobile Split
+# ADR-0008: GSAP + ScrollTrigger, matchMedia Split
 
 ## Status
-Accepted
+Accepted (scope reduced - see Context)
 
 ## Context
-Animations need different behavior on mobile vs desktop per spec and design decisions.
+The page originally registered four GSAP plugins: core, ScrollTrigger, SplitText
+and TextPlugin. Two of them were never actually used:
+- `SplitText` is a paid Club GSAP plugin and no `SplitText` call existed; the
+  hero heading is animated as a single block.
+- `TextPlugin` was registered but no tween used the `text:` property.
+
+Several tweens were also dead because their selectors matched nothing:
+- section reveal targeted `.container`, a class that does not exist in any
+  component;
+- the timeline draw targeted `#cara-mendaftar .timeline-path`, also absent;
+- `.animate-in` and `.scrolled` classes were toggled but never styled.
 
 ## Decision
-GSAP Core + ScrollTrigger + SplitText + TextPlugin (4 plugins).
-Responsive splits via `gsap.matchMedia()`:
+Register only what runs, and keep a single responsive split:
 
-| Animation | Mobile | Desktop |
-|-----------|--------|---------|
-| SplitText | lines | words |
-| ScrollTrigger | `once: true` | `toggleActions: "play none none reverse"` |
-| Hero buttons | stagger 0.15s | stagger 0.1s |
+| Animation | Mobile (<768px) | Desktop (>=768px) |
+|-----------|-----------------|-------------------|
+| Jadwal steps | `scrub: 0.5`, steps 2-4 pre-hidden | same |
+| Card hover / tap lift | `touchstart`/`touchend` lift | `mouseenter`/`mouseleave` lift |
+| WhatsApp FAB | infinite `yoyo` pulse | same |
 
-All animations disabled via `prefers-reduced-motion` media query — show final state immediately.
+- `prefers-reduced-motion: reduce` returns before any tween is created, so the
+  final state is whatever the HTML says (no hidden content).
+- Dead tweens (section reveal, timeline draw) were deleted rather than fixed:
+  re-adding `.container` wrappers to 10 components would change layout.
+- GSAP itself is code-split and only fetched after `load` (see ADR-0002).
 
 ## Consequences
-- Tailored UX per device capability
-- Mobile: lighter animations, no scroll jank
-- Desktop: richer animations, reversible
-- Accessibility: respects user motion preference
+- ~115 KB of JS (pre-gzip) at most, and only after the page is usable.
+- Fewer moving parts: three tweens instead of eight, one plugin registration.
+- The scroll-scrubbed jadwal timeline is the only genuinely scroll-linked
+  animation left; everything else could be done in CSS if GSAP is ever dropped.
+- Reduced-motion users see a fully painted page with no hidden sections.
 
 ## Alternatives Considered
-- Same animation everywhere: poor mobile performance
-- CSS-only animations: insufficient for SplitText, count-up, timeline drawing
-- Framer Motion: larger bundle, GSAP better for scroll-linked animations
+- Keep SplitText/TextPlugin "in case they are needed": they cannot be used
+  without a license (SplitText) and were dead weight at runtime.
+- Replace GSAP with CSS + IntersectionObserver: attractive (~115 KB saved) but
+  loses the scrubbed timeline. Deferred, not rejected.

@@ -1,129 +1,157 @@
 # Glossary
 
-Consolidated domain terms for PSB Landing Page project.
+Consolidated domain and implementation terms for the PSB landing page.
 
 ---
 
 ## A
 
-**Astro Assets** — Astro's built-in image optimization pipeline (`<Image />`, `getImage()`). Handles WebP conversion, width/height, lazy loading.
+**Astro Assets** - Astro's built-in image pipeline (`<Image />`, `getImage()`).
+Handles WebP conversion, `srcset` generation, width/height attributes and lazy
+loading. Used for the gallery, the map placeholder and the hero renditions.
 
 ---
 
 ## B
 
-**Biaya Computed Getters** — TypeScript getters in `site.ts` that sum line-item nominals per category (Umum/Dhuafa/Yatim). Single source of truth for totals: 5,150,000 / 2,800,000 / 900,000.
+**Biaya Computed Getters** - TypeScript getters in `site.ts` that sum line-item
+nominals per category (Umum/Dhuafa/Yatim). Single source of truth for totals:
+5,150,000 / 2,800,000 / 900,000.
+
+**Bundled Entry Script** - The one `<script>` written in `index.astro`. Vite
+compiles it to `/_astro/index.<hash>.js` (about 5 KB). It contains the FAQ,
+biaya tabs, count-up, header scroll behaviour, gallery wiring, WhatsApp overlay
+and the bootstrap for GSAP. See ADR-0002.
 
 ---
 
 ## C
 
-**CSS Custom Properties** — Tailwind-integrated CSS variables for theming placeholders: `--pattern-color` (default `#C9A227`), `--pattern-opacity` (default `0.05`).
-
----
-
-## D
-
-**Dynamic Import** — Vite code-splitting via `import('./module')`. Creates separate chunks loaded on demand. Used for GSAP plugins and Three.js.
+**Count-up** - `animateBiayaTotal()`: `requestAnimationFrame` loop that eases the
+nominal from 0 to its target when a biaya tab is opened, using the
+`.biaya-total-value` element and a `data-target` cache.
 
 ---
 
 ## F
 
-**Font Stack** — System fonts only: `system-ui` (sans-serif), `Georgia` (serif). Zero download bytes, instant render.
+**FAQ Accordion** - `<button class="faq-trigger" aria-expanded aria-controls>`
+toggling `.hidden` on the answer panel and rotating `.faq-icon` 180 degrees.
+Driven by `window.toggleFaq`, not by `<details>`. See ADR-0006.
+
+**Font Stack** - Google Fonts, text subsets only, `display=swap`:
+`Noto Serif` for display/headline text, `Plus Jakarta Sans` for body/label text.
+Declared once in `tailwind.config.mjs`. See ADR-0001.
 
 ---
 
 ## G
 
-**GSAP Plugins** — Four plugins used:
-- Core: tweening engine
-- ScrollTrigger: scroll-linked animations
-- SplitText: text splitting (lines/words/chars)
-- TextPlugin: number counting animations
+**GSAP** - Animation engine, code-split into its own chunk and fetched only after
+`load` + `requestIdleCallback`. Only `gsap` core and `ScrollTrigger` are used;
+`SplitText` and `TextPlugin` were removed. See ADR-0008.
 
-**gsap.matchMedia()** — Responsive animation API. Defines conditional contexts (mobile/desktop) with different behaviors per breakpoint.
+**gsap.matchMedia()** - Responsive animation API. Creates separate contexts for
+`(max-width: 767px)` and `(min-width: 768px)` and cleans up tweens when the media
+query stops matching.
 
 ---
 
 ## H
 
-**Hero 3D (Three.js)** — Desktop-only decorative 3D: three 8-point stars (ExtrudeGeometry), gold material, parallax ±0.1 rad. Loads only on desktop matching criteria.
+**Hero Photo** - The LCP element. Rendered as a real `<img>` with WebP `srcset`
+(480/800/1200/1600w), `sizes="100vw"`, explicit `width`/`height`,
+`fetchpriority="high"`, plus a matching `<link rel="preload" imagesrcset>`.
+Renditions come from `src/utils/hero-image.ts`. See ADR-0012.
 
 ---
 
 ## I
 
-**Inline SVG Placeholders** — Zero-request placeholder images via data URIs. Islamic geometric pattern, 16:9 banner. Themeable via CSS variables.
+**Icon Component** - `src/components/Icon.astro`. Holds the 34 Material paths the
+site uses and renders `<svg class="icon">` with `fill="currentColor"` and
+`aria-hidden="true"`. Replaced the 3.9 MB Material Symbols webfont. See
+ADR-0010.
+
+**Inline Stylesheets** - `build.inlineStylesheets: 'always'` in
+`astro.config.mjs`. The single page ships zero `.css` files; the Tailwind bundle
+is inside `index.html`. See ADR-0011.
 
 ---
 
 ## J
 
-**Jadwal Status** — Client-side computed registration status per timeline item. Compares current WIB date with `tanggalMulai`/`tanggalSelesai`. Three states: `Akan Datang`, `Sedang Dibuka`, `Selesai`.
+**Jadwal Status** - `site.statusPendaftaran` getter compares "now" in WIB against
+`jadwal.tanggalBuka` / `tanggalTutup` and returns `Akan Datang`,
+`Sedang Dibuka` or `Selesai`. Computed at build time, rendered in the Jadwal
+component.
 
-**JS-Ready Pattern** — Progressive enhancement: `.js-ready` class added to `<html>` on `DOMContentLoaded`. CSS uses it to show/hide enhancement-only elements (e.g., WA float button).
+**Jadwal Timeline** - The vertical line behind the jadwal steps. Its top/height
+are calculated in `layoutJadwalLine()` from the first and last step number, so it
+stays aligned regardless of text length. Recalculated on `load`, `resize` and
+`document.fonts.ready`.
 
 ---
 
 ## K
 
-**Khusu Badge** — Visual indicator for syarat items 8–10 (indices 7–9). Class `.khusus-badge` (green pill with "Khusus" text).
+**Khusus Badge** - "Khusus Yatim" / "Khusus Dhuafa" pill, class `.badge-khusus`,
+on the syarat items whose indices are listed in `site.syarat.khususIndices`.
 
 ---
 
 ## M
 
-**Mobile-First** — Base styles target mobile; `md:` (768px+) and `lg:` (1024px+) add desktop enhancements. Navbar hamburger at `md` breakpoint.
-
----
-
-## N
-
-**Navbar Breakpoint** — `md` (768px). Desktop: horizontal links. Mobile: hamburger → slide-in panel with auto-close on link click, Escape, resize, backdrop click.
+**Mobile-First** - Base styles target mobile; `md:` (768px+) and `lg:` (1024px+)
+add desktop enhancements. The layout is a single long-scroll page with no
+hamburger menu.
 
 ---
 
 ## P
 
-**Placeholder Strategy** — Inline SVG rectangles/patterns via CSS variables. No external image requests. Works offline.
+**Placeholder Strategy** - Decorative art is inline `<svg>` (Islamic geometry,
+arch shapes). Photographs are real assets optimized at build time. No external
+placeholder service and no image request for decoration.
 
----
-
-## R
-
-**Registration Status Logic** — See "Jadwal Status". Computed in `site.ts` getter, used in Jadwal component for badges.
+**Progressive Enhancement** - All content is server-rendered HTML. Scripts add
+the accordion, tabs, slider, overlay and scroll animation; with JS disabled every
+section is still readable. There is no `.js-ready` handshake class.
 
 ---
 
 ## S
 
-**ScrollTrigger Behavior** — Mobile: `once: true` (animation runs once). Desktop: `toggleActions: "play none none reverse"` (reverses on scroll back).
+**ScrollTrigger** - GSAP plugin for scroll-linked animation. Used for the jadwal
+steps (`scrub: 0.5`) only. Dead triggers (`.container` section reveal,
+`.timeline-path` draw, `.animate-in`, `.scrolled`) were deleted.
 
-**Section Divider** — `<SectionDivider />` component with inline Islamic pattern SVG. Placed between major sections.
+**Section Divider** - `.section-divider` element inside each section header: a
+short gold gradient rule under the title. Pure CSS, no component.
 
-**Section Title Ornament** — Gold gradient bar under `h2.section-title` via `::before` pseudo-element. Animated via `.animate-in` class (scaleX 0→1).
+**Semantic Color Tokens** - Tailwind theme extensions (`primary`,
+`secondary-container`, `surface-container-*`, `on-surface`, `wa-green`, ...).
+Components use tokens, not raw hex. No dark mode. See ADR-0005.
 
-**Semantic Color Tokens** — Tailwind theme extensions: `primary`, `accent`, `background`, `surface`, `text`, `text-muted`, `border`, `wa-green`. No hardcoded hex in components.
-
-**Site.ts (Single Source)** — `src/data/site.ts` exports `const site = { ... }` with ALL spec data + computed getters. Only data file in project.
-
-**SplitText Granularity** — Mobile: per-line. Desktop: per-word. Configured via `gsap.matchMedia()`.
+**Site.ts (Single Source)** - `src/data/site.ts` exports `site` (spec data plus
+computed getters such as `biayaUmumTotal` and `statusPendaftaran`). Only data
+file in the project.
 
 ---
 
 ## T
 
-**Tailwind-only CSS** — All styling via Tailwind utilities + `@layer components` in `global.css`. No CSS modules, no CSS-in-JS, no custom CSS files.
+**Tailwind-only CSS** - All styling via Tailwind utilities plus `@layer
+components` in `src/styles/global.css`. No CSS modules, no CSS-in-JS, no second
+stylesheet.
 
-**Three.js Chunk** — Separate Vite chunk (~100KB gzipped). Loads only on desktop matching: `min-width: 1024px`, `hover: hover`, `pointer: fine`, no reduced motion, WebGL support.
-
-**Timeline Drawing** — SVG `stroke-dashoffset` animation on `.timeline-path` in `#jadwal` and `#cara-mendaftar`. GSAP animates from 100→0 on scroll enter.
+**Three.js 3D Hero** - Cancelled. No `three` dependency, no `three-hero.ts`, no
+canvas. The hero is a photo with an SVG pattern. See ADR-0009 (Rejected).
 
 ---
 
 ## W
 
-**WA Float Button** — Fixed WhatsApp button (bottom-right, z-50). Hidden until `.js-ready`, then subtle pulse animation. Auto-hides near `#kontak` via ScrollTrigger.
-
-**WebGL Check** — Runtime detection before Three.js init. Creates temporary canvas, checks `getContext('webgl')`. Falls back to static pattern SVG on failure.
+**WA FAB** - Floating WhatsApp button (bottom-right). Pulsing scale animation via
+GSAP; opens `#wa-overlay`, a panel with two contact links that locks body scroll
+and closes on Escape or backdrop click.

@@ -1,6 +1,16 @@
 ---
+import { getImage } from 'astro:assets';
 import { site } from '@/data/site';
 import gerbang from '@/assets/gerbang.jpg';
+import Icon from './Icon.astro';
+
+// Same optimized asset as the hero — avoids shipping the raw 204 KB JPEG twice.
+const mapPlaceholder = await getImage({
+  src: gerbang,
+  width: 800,
+  format: 'webp',
+  quality: 60,
+});
 ---
 
 <section id="cara-mendaftar" class="section bg-[#fbf7ee] text-on-surface" aria-labelledby="cara-mendaftar-title">
@@ -58,7 +68,7 @@ import gerbang from '@/assets/gerbang.jpg';
   <div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col gap-space-sm">
     <div class="flex items-start gap-3">
       <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0" aria-hidden="true">
-        <span class="material-symbols-outlined text-[24px]">location_on</span>
+        <Icon class="text-[24px]" name="location_on" />
       </div>
       <div class="flex flex-col min-w-0">
         <span class="font-label-sm text-label-sm uppercase font-bold text-secondary">Alamat Sekretariat PSB</span>
@@ -69,10 +79,10 @@ import gerbang from '@/assets/gerbang.jpg';
     </div>
 
     <!-- Static Map Pipeline Trigger -->
-    <div class="w-full h-44 bg-surface-container bg-cover bg-center rounded-xl overflow-hidden relative shadow-inner" data-location="Jl. Pasar Kojengkang, Kp. Sawah RT. 02 RW. 08, Ds. Cikarageman, Kec. Setu, Kab. Bekasi, Jawa Barat" style={`background-image: url("${gerbang.src}");`}>
+    <div class="w-full h-44 bg-surface-container bg-cover bg-center rounded-xl overflow-hidden relative shadow-inner" data-location="Jl. Pasar Kojengkang, Kp. Sawah RT. 02 RW. 08, Ds. Cikarageman, Kec. Setu, Kab. Bekasi, Jawa Barat" style={`background-image: url("${mapPlaceholder.src}");`}>
       <div class="absolute inset-0 bg-primary/10 flex items-center justify-center">
         <div class="bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 text-primary shadow-md">
-          <span class="material-symbols-outlined text-[18px] text-error" aria-hidden="true">location_on</span>
+          <Icon class="text-[18px] text-error" name="location_on" />
           <span class="font-label-sm text-label-sm font-bold">Lokasi Al-Lathifah 2</span>
         </div>
       </div>
@@ -84,7 +94,7 @@ import gerbang from '@/assets/gerbang.jpg';
       rel="noopener noreferrer"
       target="_blank"
     >
-      <span class="material-symbols-outlined text-[20px] text-secondary-fixed" aria-hidden="true">navigation</span>
+      <Icon class="text-[20px] text-secondary-fixed" name="navigation" />
       <span>Buka di Google Maps</span>
     </a>
   </div>

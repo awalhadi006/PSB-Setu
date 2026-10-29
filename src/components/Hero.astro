@@ -1,14 +1,35 @@
 ---
+import { heroSrc, heroSrcset, heroSizes } from '../utils/hero-image';
 import { site } from '@/data/site';
-import gerbang from '@/assets/gerbang.jpg';
+import Icon from './Icon.astro';
 ---
 
 <section
   id="beranda"
   class="relative w-full bg-gradient-to-b from-primary-container via-[#145a41] to-primary text-on-primary px-gutter-mobile pt-space-md pb-space-xl overflow-hidden"
-  style={`background-image: linear-gradient(rgba(11, 61, 46, 0.9), rgba(20, 90, 65, 0.94), rgba(0, 38, 27, 0.97)), url("${gerbang.src}"); background-size: cover; background-position: center center;`}
   aria-labelledby="hero-title"
 >
+  <!-- LCP photo as a real <img> so it can be srcset'd, preloaded and cheap to
+       decode on a phone (a CSS background-image forces one fixed size). -->
+  <img
+    src={heroSrc}
+    srcSet={heroSrcset}
+    sizes={heroSizes}
+    alt=""
+    aria-hidden="true"
+    width="1600"
+    height="1065"
+    fetchpriority="high"
+    decoding="async"
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+  <!-- Tint + gradient, same colours as the previous background shorthand. -->
+  <div
+    class="absolute inset-0"
+    aria-hidden="true"
+    style="background-image: linear-gradient(rgba(11, 61, 46, 0.9), rgba(20, 90, 65, 0.94), rgba(0, 38, 27, 0.97));"
+  >
+  </div>
   <!-- Subtle Arabesque Geometric Pattern Background Watermark -->
   <div class="absolute inset-0 opacity-[0.06] pointer-events-none flex items-center justify-center">
     <svg class="w-full h-full text-secondary-container" fill="currentColor" viewBox="0 0 400 400" aria-hidden="true">
@@ -27,7 +48,7 @@ import gerbang from '@/assets/gerbang.jpg';
 
     <!-- Badge Penerimaan Santri Baru -->
     <div class="hero-badge mb-space-md" aria-hidden="true">
-      <span class="psb-badge-icon">school</span>
+      <Icon class="psb-badge-icon" name="school" />
       <span class="psb-badge-text">Penerimaan Santri Baru 2027-2028</span>
     </div>
 
@@ -47,12 +68,12 @@ import gerbang from '@/assets/gerbang.jpg';
       <div class="arch-photo-inner">
         <div
           class="arch-photo-bg"
-          style={`background-image: url("${gerbang.src}");`}
+          style={`background-image: url("${heroSrc}");`}
           aria-hidden="true"
         ></div>
         <div class="arch-photo-overlay">
           <span class="arch-photo-caption">
-            <span class="material-symbols-outlined text-[15px]" aria-hidden="true">verified</span>
+            <Icon class="text-[15px]" name="verified" />
             Kampus Al-Lathifah 2 Setu
           </span>
           <p class="arch-photo-location">Gerbang Masuk Kampus 2 Setu, Bekasi</p>
@@ -70,7 +91,7 @@ import gerbang from '@/assets/gerbang.jpg';
         aria-label="Cara mendaftar santri baru"
         onclick="event.preventDefault(); document.getElementById('cara-mendaftar').scrollIntoView({behavior: 'smooth'});"
       >
-        <span class="material-symbols-outlined text-[20px] text-secondary-fixed" aria-hidden="true">arrow_circle_down</span>
+        <Icon class="text-[20px] text-secondary-fixed" name="arrow_circle_down" />
         <span>Cara Mendaftar</span>
       </a>
     </div>

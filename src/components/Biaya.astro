@@ -1,5 +1,6 @@
 ---
 import { site } from '@/data/site';
+import Icon from './Icon.astro';
 ---
 
 <section id="biaya" class="section bg-surface-container-lowest text-on-surface" aria-labelledby="biaya-title">
@@ -104,20 +105,20 @@ import { site } from '@/data/site';
   <!-- Catatan & Ketentuan Biaya -->
   <div class="biaya-ketentuan">
     <div class="biaya-ketentuan-header">
-      <span class="material-symbols-outlined text-[20px]" aria-hidden="true">info</span>
+      <Icon class="text-[20px]" name="info" />
       <span>Ketentuan Pembayaran</span>
     </div>
     <ul class="biaya-ketentuan-list">
       <li class="biaya-ketentuan-item">
-        <span class="biaya-ketentuan-icon">check_circle</span>
+        <Icon class="biaya-ketentuan-icon" name="check_circle" />
         <span>Biaya formulir pendaftaran Rp200.000 dibayarkan saat mengambil berkas.</span>
       </li>
       <li class="biaya-ketentuan-item">
-        <span class="biaya-ketentuan-icon">check_circle</span>
+        <Icon class="biaya-ketentuan-icon" name="check_circle" />
         <span>Biaya bangunan dan SPP bulanan bagi santri yatim gratis.</span>
       </li>
       <li class="biaya-ketentuan-item">
-        <span class="biaya-ketentuan-icon">check_circle</span>
+        <Icon class="biaya-ketentuan-icon" name="check_circle" />
         <span>Biaya masuk pesantren dilunasi ketika daftar ulang (16-17 Mei 2027).</span>
       </li>
     </ul>

@@ -1,6 +1,6 @@
 ---
 import { site } from '../data/site';
-import logo from '../assets/Logo.png';
+import { heroSrc, heroSrcset, heroSizes } from '../utils/hero-image';
 import '../styles/global.css';
 
 const props = Astro.props;
@@ -40,18 +40,6 @@ const pageTitle = `${title} | ${site.nama}`;
     <meta property="og:site_name" content={site.nama} />
     <meta property="og:locale" content="id_ID" />
 
-    <!-- Import Map for GSAP modules -->
-    <script type="importmap">
-      {
-        "imports": {
-          "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm",
-          "gsap/": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm/",
-          "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js",
-          "gsap/TextPlugin": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/TextPlugin.js"
-        }
-      }
-    </script>
-
     <!-- Favicons (optimized sizes from Logo.png) -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
@@ -62,16 +50,26 @@ const pageTitle = `${title} | ${site.nama}`;
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Preload optimized logo (WebP + PNG fallback) -->
+    <!-- Preload just the logo variant the navbar actually renders (WebP).
+         Kept low priority via the <img fetchpriority="low"> in Navbar.astro. -->
     <link rel="preload" as="image" type="image/webp" href="/logo-optimized.webp" />
-    <link rel="preload" as="image" type="image/png" href="/logo-optimized.png" />
 
-    <!-- Google Fonts -->
+    <!-- LCP hero photo. Mirrors the <img srcset> in Hero.astro exactly, so the
+         preload is reused instead of triggering a second download. -->
+    <link
+      rel="preload"
+      as="image"
+      href={heroSrc}
+      imagesrcset={heroSrcset}
+      imagesizes={heroSizes}
+      fetchpriority="high"
+    />
+
+
+    <!-- Google Fonts (text only — icons are inline SVG, no icon webfont) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen selection:bg-secondary-container selection:text-on-secondary-container">
     <slot />

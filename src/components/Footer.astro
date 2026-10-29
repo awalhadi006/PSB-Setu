@@ -1,12 +1,13 @@
 ---
 import { site } from '@/data/site';
+import Icon from './Icon.astro';
 ---
 
 <footer class="footer" role="contentinfo">
   <div class="footer-brand">
     <div class="footer-brand-header">
       <div class="footer-brand-logo" aria-hidden="true">
-        <span class="material-symbols-outlined text-[20px]">mosque</span>
+        <Icon class="text-[20px]" name="mosque" />
       </div>
       <span class="footer-brand-name">{site.nama}</span>
     </div>
@@ -14,15 +15,15 @@ import { site } from '@/data/site';
 
   <div class="footer-info">
     <p class="footer-info-item">
-      <span class="footer-info-icon" aria-hidden="true">location_on</span>
+      <Icon class="footer-info-icon" name="location_on" />
       {site.alamat}
     </p>
     <p class="footer-info-item">
-      <span class="footer-info-icon" aria-hidden="true">call</span>
+      <Icon class="footer-info-icon" name="call" />
       {site.kontak.whatsapp.nomor} / {site.kontak.whatsappAdmin.nomor}
     </p>
     <p class="footer-info-item">
-      <span class="footer-info-icon" aria-hidden="true">mail</span>
+      <Icon class="footer-info-icon" name="mail" />
       {site.kontak.email}
     </p>
   </div>

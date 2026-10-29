@@ -2,7 +2,7 @@
 
 Static informational landing page for Penerimaan Santri Baru (PSB) Tahun Ajaran 2027–2028.
 
-**Stack:** Astro (static) + Tailwind CSS + GSAP/ScrollTrigger/SplitText/TextPlugin + Three.js (desktop only)  
+**Stack:** Astro (static) + Tailwind CSS + GSAP/ScrollTrigger (bundled, loaded after paint)  
 **Deploy:** Cloudflare Pages (`npm run build` → `dist/`)
 
 ---
@@ -30,40 +30,34 @@ npm run preview
 ```
 src/
 ├── data/
-│   └── site.ts           # ALL content + computed getters (SINGLE SOURCE OF TRUTH)
+│   └── site.ts           # Reference data + computed getters (single source of truth)
 ├── components/           # Astro components (14 sections + UI)
+│   └── Icon.astro        # Inline SVG icon set (no icon webfont)
 ├── layouts/
-│   └── BaseLayout.astro  # HTML shell, meta, fonts, favicon
+│   └── BaseLayout.astro  # HTML shell, meta, fonts, favicons, hero preload
 ├── pages/
-│   └── index.astro       # Main page assembling all sections
-├── scripts/
-│   ├── main.ts           # JS entry: .js-ready, dynamic imports
-│   ├── gsap-animations.ts # All GSAP/ScrollTrigger logic
-│   └── three-hero.ts     # Three.js 3D hero (desktop only)
+│   └── index.astro       # Main page: sections + page scripts (bundled by Vite)
 ├── styles/
 │   └── global.css        # Tailwind + @layer components
 └── utils/
-    └── format.ts         # Intl.NumberFormat helpers
+    └── hero-image.ts     # Hero renditions shared by <img> and <link rel=preload>
 ```
 
 ---
 
 ## Editing Content
 
-**All content lives in `src/data/site.ts`.** Edit this file to update:
+`src/data/site.ts` holds the **structured reference data** (single source of
+truth for anything used in more than one place):
 
-- Pondok name, tagline, tahun ajaran
-- Sistem pendidikan, visi, misi, motto
-- Ringkasan stats (3 Tahun SMP, 3 Tahun Aliyah, 24 Jam)
-- Kegiatan (5 cards)
-- Pengajar campuses (5 entries)
-- Jadwal Penerimaan (dates, stages, keterangan)
-- Syarat Pendaftaran (10 items, indices 7-9 = Khusus)
-- Biaya Pendidikan (3 categories: Umum/Dhuafa/Yatim with line items)
-- Alur Pendaftaran (5 steps)
-- FAQ (6 Q&A)
-- Kontak (2 WhatsApp, website, email, media sosial)
-- Slogan foto galeri
+- Pondok name, tagline, address, tahun ajaran
+- Contact block: two WhatsApp numbers with pre-filled messages, website, email,
+  social links, Maps link
+- Biaya Pendidikan (3 categories: Umum/Dhuafa/Yatim with line items) and the
+  computed totals
+
+Long-form copy (profil, kegiatan, pengajar, jadwal, syarat, alur, FAQ, galeri)
+lives in the component that renders it: `src/components/<Section>.astro`.
 
 ### Biaya Totals (Auto-Computed)
 Do NOT hardcode totals. They are computed getters:
@@ -72,14 +66,17 @@ get biayaUmumTotal() { return this.biaya.umum.items.reduce((a,b)=>a+b.nominal,0)
 get biayaDhuafaTotal() { return this.biaya.dhuafa.items.reduce((a,b)=>a+b.nominal,0) } // 2,800,000
 get biayaYatimTotal() { return this.biaya.yatim.items.reduce((a,b)=>a+b.nominal,0) } // 900,000
 ```
-Edit line items; totals update automatically.
+Edit line items; totals update automatically. Dev builds `console.assert()` the
+three totals so a drift shows up immediately.
 
-### Adding/Removing Syarat Items
-1. Add/remove string in `site.syarat.items` array
-2. Update `site.syarat.khususIndices` (0-based indices for "Khusus" badge)
+### Syarat Items
+The list and its "Khusus Yatim"/"Khusus Dhuafa" badges are in
+`src/components/Syarat.astro`. Edit the item markup there (`.badge-khusus`).
 
-### Bidirectional Data
-Navbar links and section IDs are synchronized via `navLinks` array in `Navbar.astro` and `id` attributes on sections. Keep them in sync.
+### Section IDs
+The header has no navigation menu (single long-scroll page). Section `id`s
+(`#beranda` ... `#kontak`) are only used by in-page links and buttons, so if you
+rename one, search the components for the old id.
 
 ---
 
@@ -89,13 +86,16 @@ Navbar links and section IDs are synchronized via `navLinks` array in `Navbar.as
 2. **Build settings:**
    - Build command: `npm run build`
    - Build output directory: `dist`
-   - Node version: 20+ (set in Pages dashboard → Settings → Environment variables)
+   - Node version: 22+ (`engines` in `package.json` requires `>=22.22.0`)
 3. **Deploy** — Cloudflare runs build on every push to main
+
+`public/_headers` ships the security headers (CSP, HSTS-less, cache policy) with
+the build; it allows Google Fonts only, no CDN script origin.
 
 ### Environment Variables (Optional)
 | Variable | Description |
 |----------|-------------|
-| `NODE_VERSION` | 20 (recommended) |
+| `NODE_VERSION` | 22 (matches `engines`) |
 
 ---
 
@@ -103,28 +103,31 @@ Navbar links and section IDs are synchronized via `navLinks` array in `Navbar.as
 
 | Feature | Implementation |
 |---------|----------------|
-| **Progressive Enhancement** | `.js-ready` pattern; content works without JS |
+| **Progressive Enhancement** | All content is server-rendered HTML; scripts only add polish |
 | **Mobile-First** | Base styles mobile; `md:` (768px) + `lg:` (1024px) enhancements |
-| **Animations** | GSAP + ScrollTrigger + SplitText + TextPlugin; `prefers-reduced-motion` respected |
-| **3D Hero** | Three.js chunk loads ONLY on desktop (min-width 1024px, hover, fine pointer, no reduced motion, WebGL) |
+| **Animations** | GSAP + ScrollTrigger in a code-split chunk fetched after `load`; `prefers-reduced-motion` respected |
+| **Icons** | Inline `<svg>` from `Icon.astro` (~34 paths) — no icon webfont request |
 | **Offline Registration** | No forms, no DB — only WhatsApp links & Maps button |
 | **Accessibility** | Semantic HTML, native `<details>` FAQ, focus-visible, ARIA labels, WCAG AA contrast |
-| **Performance** | Dynamic imports, code splitting, `setPixelRatio(min(dpr,1.5))`, `ScrollTrigger.refresh()` on load |
+| **Performance** | Inlined CSS, responsive hero `<img>` with `srcset` + `fetchpriority="high"`, WebP gallery via `<Image>`, zero third-party requests |
 
 ---
 
 ## Tech Decisions (ADRs)
 
 See `docs/adr/` for Architecture Decision Records:
-- 0001: System Fonts + Inline SVG Placeholders
-- 0002: Single JS Entry + Dynamic Imports + .js-ready
+- 0001: Google Fonts (text only) + Inline SVG Placeholders
+- 0002: Single Bundled Entry Script + Lazy GSAP Chunk
 - 0003: Astro Assets + Tailwind-only CSS
 - 0004: Single site.ts with Computed Biaya Totals
 - 0005: Semantic Tailwind Color Tokens, No Dark Mode
 - 0006: Native `<details>` FAQ, `md` Navbar, Single Banner
 - 0007: Umami Analytics Trade-off (not included)
-- 0008: GSAP Plugins + matchMedia Desktop/Mobile Split
-- 0009: Three.js Hero 3D — Constrained Desktop Only
+- 0008: GSAP + matchMedia Desktop/Mobile Split
+- 0009: Three.js 3D Hero — **Rejected** (not implemented)
+- 0010: Inline SVG Icons Instead of an Icon Font
+- 0011: Inlined Stylesheets (single-page site)
+- 0012: Hero Photo as a Responsive `<img>` (LCP)
 
 ---
 
@@ -144,8 +147,9 @@ Before deploying, verify:
 - [ ] Mobile menu: opens/closes, auto-closes on link click
 - [ ] WA float doesn't cover footer/#kontak
 - [ ] Animations smooth at 4x CPU throttling (DevTools)
-- [ ] Mobile Network tab: no Three.js chunk loaded
-- [ ] Desktop: 3D works, pauses when off-screen
+- [ ] Network tab: only first-party requests (no CDN, no icon font)
+- [ ] Icons render as inline SVG (check a few, not just the count)
+- [ ] FAQ icon rotates, gallery arrows change slide, biaya tabs switch
 - [ ] JS disabled: all content visible
 - [ ] `prefers-reduced-motion`: all content visible, no animation
 
