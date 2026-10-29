@@ -31,9 +31,10 @@ showed:
   *after* the hero photo has been painted, and never delays LCP.
 - No `.js-ready` handshake. Server-rendered HTML is the source of truth; scripts
   only add behaviour on top of it.
-- Anything below the fold that animates is animated by GSAP; the hero is not
-  animated at all, because a fade-in on the LCP element is a self-inflicted
-  speed penalty.
+- The hero *content* has a CSS-only entrance (staggered opacity/translate that
+  starts at first paint, no JS, no network). The hero *photo* is never animated:
+  it is the LCP element, and fading it in would delay the largest contentful
+  paint.
 
 ## Consequences
 - Zero third-party script requests; CSP no longer needs `cdn.jsdelivr.net`.

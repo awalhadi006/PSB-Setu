@@ -97,3 +97,37 @@ import Icon from './Icon.astro';
     </div>
   </div>
 </section>
+
+<style>
+  /* Hero entrance, staggered from the chip down to the CTA.
+     Pure CSS so it starts at first paint without waiting for any script.
+     The background photo is deliberately NOT animated: it is the LCP element
+     and fading it in would delay the largest contentful paint. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-status,
+    .hero-badge,
+    .hero-title,
+    .slogan-box,
+    .arch-photo,
+    .hero-buttons {
+      animation: hero-rise 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .hero-badge { animation-delay: 70ms; }
+    .hero-title { animation-delay: 140ms; }
+    .slogan-box { animation-delay: 210ms; }
+    .arch-photo { animation-delay: 280ms; }
+    .hero-buttons { animation-delay: 350ms; }
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

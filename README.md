@@ -105,7 +105,8 @@ the build; it allows Google Fonts only, no CDN script origin.
 |---------|----------------|
 | **Progressive Enhancement** | All content is server-rendered HTML; scripts only add polish |
 | **Mobile-First** | Base styles mobile; `md:` (768px) + `lg:` (1024px) enhancements |
-| **Animations** | GSAP + ScrollTrigger in a code-split chunk fetched after `load`; `prefers-reduced-motion` respected |
+| **Animations** | Hero entrance is pure CSS (starts at first paint, photo untouched); everything below the fold uses GSAP + ScrollTrigger in a code-split chunk fetched after `load`. Biaya line items count up row by row on first view, card lift covers alur + persyaratan + gallery. `prefers-reduced-motion` respected |
+| **Header** | Pinned while scrolling, hidden only at the very top of the page (`scrollY <= 4`) — no auto-hide on scroll down |
 | **Icons** | Inline `<svg>` from `Icon.astro` (~34 paths) — no icon webfont request |
 | **Offline Registration** | No forms, no DB — only WhatsApp links & Maps button |
 | **Accessibility** | Semantic HTML, native `<details>` FAQ, focus-visible, ARIA labels, WCAG AA contrast |
@@ -143,6 +144,8 @@ Before deploying, verify:
 - [ ] `npm run build` succeeds without warnings
 - [ ] All 10 section IDs match navbar links (`#beranda` through `#kontak`)
 - [ ] Biaya totals: 5,150,000 / 2,800,000 / 900,000 exactly
+- [ ] Header hidden at the very top, pinned (never slides away) once scrolled
+- [ ] Hero text/badges/CTA stagger in; hero photo is visible immediately (no fade)
 - [ ] Mobile: no horizontal scroll at 360px, tap targets ≥44px
 - [ ] Mobile menu: opens/closes, auto-closes on link click
 - [ ] WA float doesn't cover footer/#kontak

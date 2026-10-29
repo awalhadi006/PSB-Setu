@@ -256,7 +256,7 @@
   }
 
   .biaya-row-value {
-    @apply font-medium text-on-surface;
+    @apply font-medium text-on-surface tabular-nums;
   }
 
   .biaya-row-value-free {
@@ -272,7 +272,7 @@
   }
 
   .biaya-total-value {
-    @apply font-headline-sm text-headline-sm text-secondary-fixed font-bold;
+    @apply font-headline-sm text-headline-sm text-secondary-fixed font-bold tabular-nums;
   }
 
   /* Biaya ketentuan */

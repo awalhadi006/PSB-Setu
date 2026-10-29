@@ -18,18 +18,27 @@ loading. Used for the gallery, the map placeholder and the hero renditions.
 nominals per category (Umum/Dhuafa/Yatim). Single source of truth for totals:
 5,150,000 / 2,800,000 / 900,000.
 
+**Biaya Counters** - `animateBiayaPanel(tab)`: `requestAnimationFrame` loop that
+eases **every** rupiah figure in a panel from 0 to its target. Rows stagger 55 ms
+apart (900 ms each) and the total lands last (1100 ms). Targets are cached in
+`data-target` from the rendered HTML, so there is no second source of truth.
+`GRATIS` rows are skipped. Fires once via `IntersectionObserver` when `#biaya`
+first becomes visible, and again on every tab switch. `prefers-reduced-motion`
+skips it entirely.
+
 **Bundled Entry Script** - The one `<script>` written in `index.astro`. Vite
 compiles it to `/_astro/index.<hash>.js` (about 5 KB). It contains the FAQ,
-biaya tabs, count-up, header scroll behaviour, gallery wiring, WhatsApp overlay
-and the bootstrap for GSAP. See ADR-0002.
+biaya tabs and counters, header visibility, gallery wiring, WhatsApp overlay and
+the bootstrap for GSAP. See ADR-0002.
 
 ---
 
 ## C
 
-**Count-up** - `animateBiayaTotal()`: `requestAnimationFrame` loop that eases the
-nominal from 0 to its target when a biaya tab is opened, using the
-`.biaya-total-value` element and a `data-target` cache.
+**Card Lift** - Hover (desktop) / tap (touch) micro-interaction applied to
+`.card-elevated*`, `.card-surface-low`, `.syarat-item`, `.step-card` (alur
+pendaftaran), `.narahubung-card`, `.biaya-content`, `.misi-card`, `.galeri-card`:
+a 4px rise via GSAP, disabled under `prefers-reduced-motion`.
 
 ---
 
@@ -58,6 +67,18 @@ query stops matching.
 ---
 
 ## H
+
+**Header Pinning** - `updateHeader()` toggles the `hidden` class only when
+`scrollY <= 4`, so the bar is invisible at the very top of the page and stays
+pinned for the whole scroll. The old `-translate-y-full` auto-hide on scroll-down
+was removed.
+
+**Hero Entrance** - CSS-only keyframes (`hero-rise`) staggered from the status
+chip to the CTA: `.hero-status` 0 ms, `.hero-badge` 70 ms, `.hero-title` 140 ms,
+`.slogan-box` 210 ms, `.arch-photo` 280 ms, `.hero-buttons` 350 ms; 0.62 s on
+`cubic-bezier(0.22, 1, 0.36, 1)`. Runs at first paint with no JS and no request.
+The background `<img>` is never animated because it is the LCP element. See
+ADR-0002 and ADR-0012.
 
 **Hero Photo** - The LCP element. Rendered as a real `<img>` with WebP `srcset`
 (480/800/1200/1600w), `sizes="100vw"`, explicit `width`/`height`,

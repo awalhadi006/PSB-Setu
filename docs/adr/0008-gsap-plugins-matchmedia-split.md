@@ -21,12 +21,26 @@ Register only what runs, and keep a single responsive split:
 
 | Animation | Mobile (<768px) | Desktop (>=768px) |
 |-----------|-----------------|-------------------|
+| Hero entrance | CSS only: staggered `opacity`/`translateY`, starts at first paint | same |
 | Jadwal steps | `scrub: 0.5`, steps 2-4 pre-hidden | same |
 | Card hover / tap lift | `touchstart`/`touchend` lift | `mouseenter`/`mouseleave` lift |
+| Biaya counters | every line item counts up, total lands last | same |
 | WhatsApp FAB | infinite `yoyo` pulse | same |
 
-- `prefers-reduced-motion: reduce` returns before any tween is created, so the
-  final state is whatever the HTML says (no hidden content).
+- The hero entrance is deliberately **not** GSAP: waiting for a ~40 KB chunk
+  fetched after `load` would make the title appear, disappear and re-animate.
+  CSS keyframes start at first paint with zero requests. Only the text, badges,
+  arch photo and CTA animate - never the background photo, which is the LCP
+  element (see ADR-0012).
+- Card lift covers `.syarat-item`, `.step-card` (alur pendaftaran),
+  `.card-elevated*`, `.card-surface-low`, `.narahubung-card`, `.biaya-content`,
+  `.misi-card`, `.galeri-card`.
+- Biaya counters run on an `IntersectionObserver` the first time `#biaya` is
+  visible, so the numbers count up in front of the user rather than off-screen.
+  `switchBiayaTab()` re-runs the same animation for the chosen panel, staggered
+  row by row, with the total last.
+- `prefers-reduced-motion: reduce` returns before any tween or counter is
+  created, so the final state is whatever the HTML says (no hidden content).
 - Dead tweens (section reveal, timeline draw) were deleted rather than fixed:
   re-adding `.container` wrappers to 10 components would change layout.
 - GSAP itself is code-split and only fetched after `load` (see ADR-0002).

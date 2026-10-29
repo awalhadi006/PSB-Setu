@@ -174,7 +174,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       // ==========================================
       // CARD HOVER/TAP LIFT
       // ==========================================
-      var cards = document.querySelectorAll('.card-elevated, .card-elevated-lg, .card-surface-low, .syarat-item, .almamater-item, .narahubung-card, .biaya-content, .misi-card, .galeri-card');
+      var cards = document.querySelectorAll('.card-elevated, .card-elevated-lg, .card-surface-low, .syarat-item, .almamater-item, .narahubung-card, .biaya-content, .misi-card, .galeri-card, .step-card');
       cards.forEach(function(card) {
         var hoverTween = null;
         
@@ -252,39 +252,69 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
           content?.classList.add('hidden');
         }
       });
-      // Trigger counter animation for the newly shown panel
-      animateBiayaTotal(tabName);
+      // Count up every rupiah figure in the newly shown panel
+      animateBiayaPanel(tabName);
     }
 
-    // 4. Biaya total counter: smooth count-up
-    function animateBiayaTotal(tabName) {
+    // 4. Biaya counters: smooth count-up for each line item and the total
+    var biayaAnimations = {};
+
+    function biayaTarget(el) {
+      // Cache the value that is rendered in the HTML, so no data file is needed
+      if (!el.dataset.target) {
+        var text = el.textContent || '';
+        el.dataset.target = String(parseInt(text.replace(/\D/g, ''), 10) || 0);
+      }
+      return parseInt(el.dataset.target, 10) || 0;
+    }
+
+    function animateBiayaPanel(tabName) {
       var panel = document.getElementById('content-' + tabName);
       if (!panel) return;
+
+      // Line items are staggered bottom-up so the eye follows the list, and the
+      // total lands last. GRATIS rows keep their static text.
+      var rows = Array.prototype.slice.call(
+        panel.querySelectorAll('.biaya-row-value:not(.biaya-row-value-free)')
+      );
       var totalEl = panel.querySelector('.biaya-total-value');
-      if (!totalEl) return;
 
-      // Get target from data attribute (set once on first run)
-      var target = parseInt(totalEl.dataset.target || '0', 10);
-      if (!target) {
-        var text = totalEl.textContent || '';
-        target = parseInt(text.replace(/\D/g, ''), 10);
-        totalEl.dataset.target = String(target);
+      var targets = rows.map(function(el) {
+        return { el: el, value: biayaTarget(el), delay: 0, duration: 900 };
+      });
+      if (totalEl) {
+        targets.push({
+          el: totalEl,
+          value: biayaTarget(totalEl),
+          delay: rows.length * 55,
+          duration: 1100,
+        });
       }
-      if (!target) return;
+      if (targets.length === 0) return;
 
-      var duration = 1200;
-      var startTime = performance.now();
+      // Cancel a previous run for this panel so rapid tab clicks stay readable
+      if (biayaAnimations[tabName]) cancelAnimationFrame(biayaAnimations[tabName]);
+
+      var start = performance.now();
+      var longest = Math.max.apply(
+        null,
+        targets.map(function(t) { return t.delay + t.duration; })
+      );
+
       var frame = function(now) {
-        var elapsed = now - startTime;
-        var progress = Math.min(elapsed / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        var displayValue = Math.round(target * eased);
-        totalEl.textContent = 'Rp ' + displayValue.toLocaleString('id-ID');
-        if (progress < 1) {
-          requestAnimationFrame(frame);
+        var elapsed = now - start;
+        targets.forEach(function(t) {
+          var progress = Math.min(Math.max((elapsed - t.delay) / t.duration, 0), 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          t.el.textContent = 'Rp' + Math.round(t.value * eased).toLocaleString('id-ID');
+        });
+        if (elapsed < longest) {
+          biayaAnimations[tabName] = requestAnimationFrame(frame);
+        } else {
+          delete biayaAnimations[tabName];
         }
       };
-      requestAnimationFrame(frame);
+      biayaAnimations[tabName] = requestAnimationFrame(frame);
     }
 
     // 5. Accordion toggle for FAQ
@@ -304,27 +334,22 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
       }
     }
 
-    // 6. Header auto-hide: hide at top, show on scroll down
+    // 6. Header visibility: hidden only at the very top of the page, pinned
+    //    while the user scrolls (it never slides away mid-page).
     var header = document.querySelector('header');
     if (header) {
-      var lastScrollY = 0;
       var threshold = 4;
-      window.addEventListener('scroll', function() {
-        var currentScrollY = window.scrollY;
-
-        if (currentScrollY <= threshold) {
-          header.classList.add('hidden');
-        } else {
-          header.classList.remove('hidden');
-
-          if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            header.classList.add('-translate-y-full');
-          } else {
-            header.classList.remove('-translate-y-full');
-          }
-        }
-        lastScrollY = currentScrollY;
-      });
+      var lastVisible = null;
+      var updateHeader = function() {
+        var visible = window.scrollY > threshold;
+        if (visible === lastVisible) return;
+        lastVisible = visible;
+        header.classList.toggle('hidden', !visible);
+        // Drop any leftover offset from the old auto-hide behaviour.
+        header.classList.remove('-translate-y-full');
+      };
+      updateHeader();
+      window.addEventListener('scroll', updateHeader, { passive: true });
     }
 
     // 7. Jadwal timeline line: tepat dari nomor 1 ke nomor 4
@@ -366,9 +391,31 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     window.switchBiayaTab = switchBiayaTab;
     window.toggleFaq = toggleFaq;
 
-    // 9. Kick off animation setup once the page is loaded and the main thread is
-    //    free. GSAP is a ~40 KB chunk; requesting it earlier would slow down the
-    //    hero photo, which is the element being measured for LCP.
+    // 9. Count the biaya figures up the first time the section is seen, so the
+    //    animation happens in front of the user instead of off-screen at load.
+    function initBiayaCounters() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var section = document.getElementById('biaya');
+      if (!section || !('IntersectionObserver' in window)) return;
+
+      var observer = new IntersectionObserver(
+        function(entries) {
+          if (!entries.some(function(e) { return e.isIntersecting; })) return;
+          observer.disconnect();
+          var active = document.querySelector('.biaya-tab-btn.active');
+          var tabName = active ? active.id.replace('tab-btn-', '') : 'umum';
+          animateBiayaPanel(tabName);
+        },
+        { threshold: 0.2 }
+      );
+      observer.observe(section);
+    }
+
+    initBiayaCounters();
+
+    // 10. Kick off animation setup once the page is loaded and the main thread is
+    //     free. GSAP is a ~40 KB chunk; requesting it earlier would slow down the
+    //     hero photo, which is the element being measured for LCP.
     function startWhenIdle() {
       var run = function() {
         initAnimations().catch(function(err) {
