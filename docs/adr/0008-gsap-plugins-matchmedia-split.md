@@ -24,7 +24,7 @@ Register only what runs, and keep a single responsive split:
 | Hero entrance | CSS only: staggered `opacity`/`translateY`, starts at first paint | same |
 | Jadwal steps | `scrub: 0.5`, steps 2-4 pre-hidden | same |
 | Card hover / tap lift | `touchstart`/`touchend` lift | `mouseenter`/`mouseleave` lift |
-| Biaya counters | every figure counts up together (1.7 s) | same |
+| Biaya counters | every figure counts up together (3 s, ease-out) | same |
 | WhatsApp FAB | infinite `yoyo` pulse | same |
 
 - The hero entrance is deliberately **not** GSAP: waiting for a ~40 KB chunk
@@ -38,7 +38,9 @@ Register only what runs, and keep a single responsive split:
 - Biaya counters run on an `IntersectionObserver` that watches the **active
   panel**, not `#biaya`: the section header and tabs sit above the figures, so a
   section-level threshold fired while the numbers were still below the fold.
-  Line items and the total now start together and land together over 1.7 s.
+  Line items and the total now start together and land together over 3 s with an
+ease-out sine curve, which keeps the digit churn readable instead of burning
+through the value in the first half second.
   `switchBiayaTab()` re-runs the same animation for the chosen panel.
 - `prefers-reduced-motion: reduce` returns before any tween or counter is
   created, so the final state is whatever the HTML says (no hidden content).

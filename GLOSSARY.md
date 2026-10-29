@@ -19,8 +19,8 @@ nominals per category (Umum/Dhuafa/Yatim). Single source of truth for totals:
 5,150,000 / 2,800,000 / 900,000.
 
 **Biaya Counters** - `animateBiayaPanel(tab)`: `requestAnimationFrame` loop that
-eases **every** rupiah figure in a panel from 0 to its target over 1.7 s
-(ease-out). Line items and the total run at the same time and settle together, so
+eases **every** rupiah figure in a panel from 0 to its target over 3 s
+(ease-out sine, so the digits do not race through the value at the start). Line items and the total run at the same time and settle together, so
 the panel reads as one movement. Targets are cached in `data-target` from the
 rendered HTML, so there is no second source of truth; `GRATIS` rows are skipped.
 The first run is triggered by an `IntersectionObserver` on the active panel

@@ -105,7 +105,7 @@ the build; it allows Google Fonts only, no CDN script origin.
 |---------|----------------|
 | **Progressive Enhancement** | All content is server-rendered HTML; scripts only add polish |
 | **Mobile-First** | Base styles mobile; `md:` (768px) + `lg:` (1024px) enhancements |
-| **Animations** | Hero entrance is pure CSS (starts at first paint, photo untouched); everything below the fold uses GSAP + ScrollTrigger in a code-split chunk fetched after `load`. All biaya figures count up together (1.7 s) when the panel first scrolls into view; card lift covers alur + persyaratan + gallery. `prefers-reduced-motion` respected |
+| **Animations** | Hero entrance is pure CSS (starts at first paint, photo untouched); everything below the fold uses GSAP + ScrollTrigger in a code-split chunk fetched after `load`. All biaya figures count up together (3 s, ease-out) when the panel first scrolls into view; card lift covers alur + persyaratan + gallery. `prefers-reduced-motion` respected |
 | **Header** | Pinned while scrolling, hidden only at the very top of the page (`scrollY <= 4`) — no auto-hide on scroll down |
 | **Icons** | Inline `<svg>` from `Icon.astro` (~34 paths) — no icon webfont request |
 | **Offline Registration** | No forms, no DB — only WhatsApp links & Maps button |

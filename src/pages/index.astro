@@ -258,7 +258,7 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
 
     // 4. Biaya counters: smooth count-up for every line item and the total
     var biayaAnimations = {};
-    var BIAYA_DURATION = 1700;
+    var BIAYA_DURATION = 3000;
 
     function biayaTarget(el) {
       // Cache the value that is rendered in the HTML, so no data file is needed
@@ -294,7 +294,9 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
 
       var frame = function(now) {
         var progress = reduce ? 1 : Math.min((now - start) / BIAYA_DURATION, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
+        // ease-out sine: a gentler start than ease-out cubic, so the digits do
+        // not race through most of the value in the first few hundred ms
+        var eased = reduce ? 1 : Math.sin(progress * Math.PI / 2);
         targets.forEach(function(t) {
           t.el.textContent = 'Rp' + Math.round(t.value * eased).toLocaleString('id-ID');
         });
