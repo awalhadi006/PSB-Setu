@@ -24,10 +24,16 @@ over 0.8 s and land on the exact value. It is not a 0-to-value count: the figure
 keeps its own length, `Rp` prefix and thousands separators (and never starts with
 a 0), so the row never changes width. The real strings come from `data-target`
 parsed out of the rendered HTML, so there is no second source of truth; `GRATIS`
-rows are skipped. The first run is triggered by an `IntersectionObserver` on the
-active panel (threshold 0.45) — watching the whole `#biaya` section fired while
-the figures were still below the fold. Tab switches re-run it.
-`prefers-reduced-motion: reduce` shows the real numbers immediately.
+rows are skipped.
+
+It plays **once per category per page load**: `biayaPlayed` records the panel
+that has already run, so returning to a tab shows the final numbers immediately
+(`settleBiayaPanel`) and the figures can be compared without waiting. A reload
+clears the record and the scramble plays again. Each panel has its own
+`IntersectionObserver` (threshold 0.45) so it only plays when on screen — the
+section header and tabs made a section-level threshold fire while the figures
+were still below the fold. `prefers-reduced-motion: reduce` shows the real
+numbers immediately.
 
 **Bundled Entry Script** - The one `<script>` written in `index.astro`. Vite
 compiles it to `/_astro/index.<hash>.js` (about 5 KB). It contains the FAQ,

@@ -252,14 +252,30 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
           content?.classList.add('hidden');
         }
       });
-      // Count up every rupiah figure in the newly shown panel
-      animateBiayaPanel(tabName);
+      // Each category scrambles once per page load. Coming back to a panel that
+      // has already played shows the final numbers immediately, so the figures
+      // can be compared without waiting for the animation again.
+      if (biayaPlayed[tabName]) {
+        settleBiayaPanel(tabName);
+        return;
+      }
+
+      // First visit to a panel: play right away if it is already on screen,
+      // otherwise its observer picks it up when it scrolls into view.
+      var shown = document.getElementById('content-' + tabName);
+      if (shown) {
+        var rect = shown.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          animateBiayaPanel(tabName);
+        }
+      }
     }
 
-    // 4. Biaya counters: the figures flicker through random digits, then resolve
+    // 4. Biaya figures: the numbers flicker through random digits, then resolve
     //    into the real value. It is not a 0-to-value count: every figure keeps
     //    its own length and separators, so nothing jumps while the numbers spin.
     var biayaAnimations = {};
+    var biayaPlayed = {};       // tabName -> true once its figures have scrambled
     var BIAYA_SPIN_MS = 1200;   // pure random digits
     var BIAYA_LOCK_MS = 800;    // digits resolve left to right
     var BIAYA_TICK_MS = 55;     // how often the random digits change
@@ -300,6 +316,10 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     function animateBiayaPanel(tabName) {
       var panel = document.getElementById('content-' + tabName);
       if (!panel) return;
+
+      // Mark before the first frame: switching tabs mid-scramble must not
+      // trigger a second run.
+      biayaPlayed[tabName] = true;
 
       // Every figure spins at the same time. GRATIS rows keep their static text.
       var els = Array.prototype.slice.call(
@@ -358,6 +378,22 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
         }
       };
       biayaAnimations[tabName] = requestAnimationFrame(frame);
+    }
+
+    // Put a panel straight on its real numbers (and stop any run in flight).
+    function settleBiayaPanel(tabName) {
+      if (biayaAnimations[tabName]) {
+        cancelAnimationFrame(biayaAnimations[tabName]);
+        delete biayaAnimations[tabName];
+      }
+      var panel = document.getElementById('content-' + tabName);
+      if (!panel) return;
+      var els = panel.querySelectorAll(
+        '.biaya-row-value:not(.biaya-row-value-free), .biaya-total-value'
+      );
+      Array.prototype.forEach.call(els, function(el) {
+        el.textContent = 'Rp' + biayaTarget(el).toLocaleString('id-ID');
+      });
     }
 
     // 5. Accordion toggle for FAQ
@@ -434,30 +470,27 @@ const description = `Penerimaan Santri Baru ${site.nama} Tahun Ajaran ${site.tah
     window.switchBiayaTab = switchBiayaTab;
     window.toggleFaq = toggleFaq;
 
-    // 9. Count the biaya figures up the first time the panel is actually seen.
-    //    The observer watches the panel, not #biaya: the section header and the
-    //    tabs sit above the figures, so watching the section fired while the
-    //    numbers were still below the fold and the count-up played off-screen.
+    // 9. Scramble each biaya panel once, the first time it is actually seen.
+    //    Every panel gets its own observer, so a panel only plays when it is on
+    //    screen (no animation burned off-screen). The observer watches the panel
+    //    itself, not #biaya: the section header and tabs sit above the figures.
     function initBiayaCounters() {
-      var active = document.querySelector('.biaya-tab-btn.active');
-      var tabName = active ? active.id.replace('tab-btn-', '') : 'umum';
-      var panel = document.getElementById('content-' + tabName);
-      if (!panel) return;
+      if (!('IntersectionObserver' in window)) return; // static figures stay
 
-      if (!('IntersectionObserver' in window)) {
-        animateBiayaPanel(tabName);
-        return;
-      }
-
-      var observer = new IntersectionObserver(
-        function(entries) {
-          if (!entries.some(function(e) { return e.isIntersecting; })) return;
-          observer.disconnect();
-          animateBiayaPanel(tabName);
-        },
-        { threshold: 0.45, rootMargin: '0px 0px -10% 0px' }
-      );
-      observer.observe(panel);
+      var panels = document.querySelectorAll('.biaya-content');
+      Array.prototype.forEach.call(panels, function(panel) {
+        var tabName = panel.id.replace('content-', '');
+        var observer = new IntersectionObserver(
+          function(entries) {
+            if (!entries.some(function(e) { return e.isIntersecting; })) return;
+            observer.disconnect();
+            if (biayaPlayed[tabName]) return;
+            animateBiayaPanel(tabName);
+          },
+          { threshold: 0.45, rootMargin: '0px 0px -10% 0px' }
+        );
+        observer.observe(panel);
+      });
     }
 
     initBiayaCounters();

@@ -35,15 +35,17 @@ Register only what runs, and keep a single responsive split:
 - Card lift covers `.syarat-item`, `.step-card` (alur pendaftaran),
   `.card-elevated*`, `.card-surface-low`, `.narahubung-card`, `.biaya-content`,
   `.misi-card`, `.galeri-card`.
-- Biaya figures run on an `IntersectionObserver` that watches the **active
-  panel**, not `#biaya`: the section header and tabs sit above the figures, so a
-  section-level threshold fired while the numbers were still below the fold.
+- Biaya figures run on one `IntersectionObserver` per panel, not on `#biaya`:
+  the section header and tabs sit above the figures, so a section-level
+  threshold fired while the numbers were still below the fold.
   Each figure spins through random digits for 1.2 s, then its digits lock from
   left to right over 0.8 s and land on the exact value rendered in the HTML.
   It is deliberately not a 0-to-value count: the figure keeps its length and
   separators, so the row never changes width and nothing is implied about the
   amount until it resolves.
-  `switchBiayaTab()` re-runs the same animation for the chosen panel.
+  The scramble plays **once per category per page load** (`biayaPlayed`).
+  `switchBiayaTab()` settles an already-played panel instead of replaying it, so
+  someone comparing categories never has to wait; a reload replays everything.
 - `prefers-reduced-motion: reduce` returns before any tween is created, so the
   final state is whatever the HTML says (no hidden content).
 - Dead tweens (section reveal, timeline draw) were deleted rather than fixed:

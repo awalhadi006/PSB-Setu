@@ -105,7 +105,7 @@ the build; it allows Google Fonts only, no CDN script origin.
 |---------|----------------|
 | **Progressive Enhancement** | All content is server-rendered HTML; scripts only add polish |
 | **Mobile-First** | Base styles mobile; `md:` (768px) + `lg:` (1024px) enhancements |
-| **Animations** | Hero entrance is pure CSS (starts at first paint, photo untouched); everything below the fold uses GSAP + ScrollTrigger in a code-split chunk fetched after `load`. Biaya figures spin through random digits, then lock on the real value (2 s) when the panel first scrolls into view; card lift covers alur + persyaratan + gallery. `prefers-reduced-motion` respected |
+| **Animations** | Hero entrance is pure CSS (starts at first paint, photo untouched); everything below the fold uses GSAP + ScrollTrigger in a code-split chunk fetched after `load`. Biaya figures spin through random digits, then lock on the real value (2 s) the first time each tab is seen — returning to a tab shows the final numbers immediately; card lift covers alur + persyaratan + gallery. `prefers-reduced-motion` respected |
 | **Header** | Pinned while scrolling, hidden only at the very top of the page (`scrollY <= 4`) — no auto-hide on scroll down |
 | **Icons** | Inline `<svg>` from `Icon.astro` (~34 paths) — no icon webfont request |
 | **Offline Registration** | No forms, no DB — only WhatsApp links & Maps button |
@@ -153,6 +153,7 @@ Before deploying, verify:
 - [ ] WA float doesn't cover footer/#kontak
 - [ ] Animations smooth at 4x CPU throttling (DevTools)
 - [ ] Network tab: only first-party requests (no CDN, no icon font)
+- [ ] Biaya tabs: each category scrambles once, returning to it shows the final numbers at once
 - [ ] Icons render as inline SVG (check a few, not just the count)
 - [ ] FAQ icon rotates, gallery arrows change slide, biaya tabs switch
 - [ ] JS disabled: all content visible
