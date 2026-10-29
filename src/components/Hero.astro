@@ -1,6 +1,5 @@
 ---
 import { heroSrc, heroSrcset, heroSizes } from '../utils/hero-image';
-import { site } from '@/data/site';
 import Icon from './Icon.astro';
 ---
 
@@ -13,7 +12,7 @@ import Icon from './Icon.astro';
        decode on a phone (a CSS background-image forces one fixed size). -->
   <img
     src={heroSrc}
-    srcSet={heroSrcset}
+    srcset={heroSrcset}
     sizes={heroSizes}
     alt=""
     aria-hidden="true"
@@ -89,7 +88,7 @@ import Icon from './Icon.astro';
         class="btn-secondary-stacked"
         href="#cara-mendaftar"
         aria-label="Cara mendaftar santri baru"
-        onclick="event.preventDefault(); document.getElementById('cara-mendaftar').scrollIntoView({behavior: 'smooth'});"
+        onclick="document.getElementById('cara-mendaftar').scrollIntoView({behavior: 'smooth'}); return false;"
       >
         <Icon class="text-[20px] text-secondary-fixed" name="arrow_circle_down" />
         <span>Cara Mendaftar</span>
